@@ -10,7 +10,7 @@ module.exports = {
     database: {
         seederStorage: "sequelize",
         migrationStorage: "sequelize",
-        url: process.env.DATABASE_URL || "postgres://ziphub:ziphub@localhost:5432/ziphub",
+        url: process.env.DATABASE_URL || "postgres://admin:dreamtrips@localhost:5432/dreamtrips",
         dialect: "postgres",
         dialectOptions: {
             ssl: true
