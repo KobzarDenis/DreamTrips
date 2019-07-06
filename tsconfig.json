@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "lib": [
+      "es6",
+      "es5"
+    ],
+    "allowJs": true,
+    "outDir": "dist",
+    "removeComments": true,
+    "strict": true,
+    "noImplicitAny": false,
+    "strictPropertyInitialization": false,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": false,
+    "preserveSymlinks": true,
+    "inlineSourceMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "isolatedModules": true,
+    "baseUrl": ".",
+    "rootDir": ".",
+    "paths": {
+      "@core/*": [
+        "./src/core/*",
+        "./dist/core/*"
+      ],
+      "@config": [
+        "./src/appconfig",
+        "./dist/appconfig"
+      ]
+    },
+    "typeRoots": [
+      "node_modules/@types"
+    ]
+  },
+  "exclude": [
+    "**/node_modules/**/*",
+    "./node_modules",
+    "dist"
+  ],
+  "include": [
+    "./src/**/*"
+  ]
+}
