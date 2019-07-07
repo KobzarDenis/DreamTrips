@@ -1,7 +1,9 @@
 import * as  express from 'express';
 import * as  bodyParser from 'body-parser';
 import * as  cookieParser from 'cookie-parser';
-import * as  appconfig from "../../../appconfig";
+import * as fs from "fs-extra";
+import * as path from "path";
+import { Logger } from "@core/Logger";
 
 export class ExpressServer {
 
@@ -13,10 +15,42 @@ export class ExpressServer {
     return this._server;
   }
 
-  constructor() {
+  constructor(private config: any, routesPath: string) {
     this._server = null;
     this.app = null;
     this.tasks = [];
+    this.injectRoutes(routesPath);
+  }
+
+  private injectRoutes(routesPath: string) {
+    try {
+      if (!routesPath) {
+        return;
+      }
+      const files = fs.readdirSync(routesPath);
+
+      for (const file of files) {
+        const fileStat = fs.statSync(path.join(routesPath, file));
+        if (fileStat.isDirectory()) {
+          this.injectRoutes(path.join(routesPath, file));
+        }
+        if ((path.extname(file) !== ".js" && path.extname(file) !== ".ts") || file.indexOf("routes") === -1) {
+          continue;
+        }
+        this.addHandlers(path.join(routesPath, file));
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
+  public addHandlers(file: string) {
+    try {
+      const module = require(file);
+      this.tasks = this.tasks.concat(module.routes);
+    } catch (err) {
+      Logger.getInstance().error(err.message);
+    }
   }
 
   private initRouts() {
@@ -84,26 +118,26 @@ export class ExpressServer {
   }
 
   private async checkPermission(sessionId, permissions, req) {
-    const user = await sessionHelper.getSessionUser(sessionId);
-
-    if (!permissions.isLogin) {
-      if (user && req) {
-        req.user = user;
-      }
-      return;
-    } else {
-      const user = await sessionHelper.getSessionUser(sessionId);
-
-      if (user.permissions.isAdmin) {
-        req.user = user;
-      } else {
-        if (permissions.isAdmin) {
-          throw new Error("You don't have permissions.");
-        } else {
-          req.user = user;
-        }
-      }
-    }
+    // const user = await sessionHelper.getSessionUser(sessionId);
+    //
+    // if (!permissions.isLogin) {
+    //   if (user && req) {
+    //     req.user = user;
+    //   }
+    //   return;
+    // } else {
+    //   const user = await sessionHelper.getSessionUser(sessionId);
+    //
+    //   if (user.permissions.isAdmin) {
+    //     req.user = user;
+    //   } else {
+    //     if (permissions.isAdmin) {
+    //       throw new Error("You don't have permissions.");
+    //     } else {
+    //       req.user = user;
+    //     }
+    //   }
+    // }
   }
 
   public createAdditionalHandlers(type, route, handler) {
@@ -111,8 +145,8 @@ export class ExpressServer {
   }
 
   public start() {
-    this._server = this.initRouts().listen(appconfig.server.port, () => {
-      console.log(`ExpressServer listening on ${appconfig.server.port}`);
+    this._server = this.initRouts().listen(this.config.server.port, () => {
+      console.log(`ExpressServer listening on ${this.config.server.port}`);
     });
   }
 };

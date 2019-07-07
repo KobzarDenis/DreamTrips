@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "rm -rf ./dist && gulp",
-    "start": "node --max-old-space-size=2048 ./dist/index.js"
+    "start": "node --max-old-space-size=2048 ./dist/index.js",
+    "db_migrate": "cd ./database && sequelize db:migrate"
   },
   "repository": {
     "type": "git",

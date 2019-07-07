@@ -1,6 +1,6 @@
 module.exports = {
     server: {
-        port: process.env.PORT || 3000
+        port: process.env.PORT || 8080
     },
     logger: {
         level: "verbose",
@@ -10,10 +10,10 @@ module.exports = {
     database: {
         seederStorage: "sequelize",
         migrationStorage: "sequelize",
-        url: process.env.DATABASE_URL || "postgres://admin:dreamtrips@localhost:5432/dreamtrips",
+        url: process.env.DATABASE_URL || "postgres://localhost:5432/dreamtrips",
         dialect: "postgres",
         dialectOptions: {
-            ssl: true
+            ssl: process.env.NODE_ENV !== 'dev'
         }
     },
     bot: {

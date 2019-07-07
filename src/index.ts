@@ -6,6 +6,7 @@ import * as sm from "source-map-support";
 import { TelegramBot } from "@core/bots/Telegram.bot";
 import { FacebookBot } from "@core/bots/Facebook.bot";
 import { ExpressServer } from "@core/servers/Express.server"
+import * as path from "path";
 
 sm.install();
 
@@ -14,15 +15,14 @@ sm.install();
     //Creating instances
     Logger.getInstance(appconfig.logger);
 
-    const es = new ExpressServer();
+    const es = new ExpressServer(appconfig, path.join(__dirname, './controllers'));
     es.start();
 
     new FacebookBot(appconfig.bot.facebook.token, es).init();
     new TelegramBot(appconfig.bot.telegram.token).init();
 
     const db = Database.getInstance(appconfig.database);
-
-    // db.injectModels(path.join(__dirname, "./core/models"));
+    db.injectModels(path.join(__dirname, "./core/models"));
 
   } catch (error) {
     throw new Error(error.message);

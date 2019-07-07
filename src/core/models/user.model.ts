@@ -1,39 +1,21 @@
-import { File } from "@models/file.model";
-import { GlobalRole } from "@models/permissions/globalRole.model";
-import { Advertiser } from "@models/user/advertiser.model";
-import { Charity } from "@models/user/charity.model";
-import { Consumer } from "@models/user/consumer.model";
-import { Referral } from "@models/referral.model";
 import {
-  BelongsTo,
   Column,
   CreatedAt,
   DataType,
   DefaultScope,
-  DeletedAt,
   ForeignKey,
-  HasMany,
-  HasOne,
   Model,
-  Scopes,
   Table,
   UpdatedAt
 } from "sequelize-typescript";
+import * as sequelize from "sequelize";
 
 @DefaultScope({
-  include: [{
-    model: () => File
-  }],
-  attributes: ["id", "email", "phoneNumber", "firstName", "lastName", "isSuspended", "avatarId", "createdAt"]
-})
-@Scopes({
-  auth: {
-    attributes: ["id", "email", "phoneNumber", "password"]
-  }
+  attributes: ["id", "email", "phoneNumber", "firstName", "lastName", "botSource", "botId", "uuid"]
 })
 @Table({
   timestamps: true,
-  paranoid: true,
+  paranoid: false,
   freezeTableName: true,
   tableName: "users",
   schema: "users"
@@ -51,81 +33,47 @@ export class User extends Model<User> {
   })
   public phoneNumber: string;
 
-  @Column
+  @Column({
+    allowNull: true
+  })
   public password: string;
 
   @Column
+  @Column({
+    allowNull: true
+  })
   public firstName: string;
 
   @Column
+  @Column({
+    allowNull: true
+  })
   public lastName: string;
 
-  @ForeignKey(() => GlobalRole)
   @Column({
-    allowNull: false
+    type: DataType.ENUM(["telegram", "facebook", "viber", "watsapp"]),
+    allowNull: true
   })
-  public roleId: number;
-
-  @ForeignKey(() => File)
-  @Column
-  public avatarId: number;
+  public botSource: string;
 
   @Column({
-    type: DataType.BOOLEAN,
+    type: DataType.STRING,
+    allowNull: true
+  })
+  public botId: string;
+
+  @Column({
+    type: DataType.STRING,
+    unique: true,
     allowNull: false,
-    defaultValue: false
+    defaultValue: sequelize.fn('uuid_generate_v4'),
   })
-  public isSuspended: boolean;
-
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-    defaultValue: null,
-  })
-  public registrationCity: string;
-
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-    defaultValue: null,
-  })
-  public registrationState: string;
-
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-    defaultValue: null,
-  })
-  public registrationZip: string;
+  public uuid: string;
 
   @CreatedAt
   public createdAt: Date;
 
   @UpdatedAt
   public updatedAt: Date;
-
-  @DeletedAt
-  public deletedAt: Date;
-
-  @BelongsTo(() => GlobalRole)
-  public role: GlobalRole;
-
-  @HasOne(() => Consumer)
-  public consumer: Consumer;
-
-  @HasOne(() => Advertiser)
-  public advertiser: Advertiser;
-
-  @BelongsTo(() => File)
-  public avatar: File;
-
-  @HasOne(() => Charity)
-  public charity: Charity;
-
-  @HasMany(() => Referral, "referrerId")
-  public referrals: Referral[];
-
-  @HasOne(() => Referral, "referralId")
-  public referrer: Referral;
 
 }

@@ -1,0 +1,13 @@
+{
+  "name": "DreamTrips Funnel",
+  "description": "App for making a super funnel",
+  "addons": [
+    "heroku-postgresql",
+    {
+      "as": "DATABASE_URL",
+      "options": {
+        "name": "dreamtrips-postgres"
+      }
+    }
+  ]
+}
