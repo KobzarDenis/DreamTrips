@@ -1,8 +1,8 @@
-import { BaseState } from "./Base.state";
+import { State } from "./State";
 
 export class StateHolder {
 
-  private _state: BaseState;
+  private _state: State;
 
   constructor() {
     this._state = null; // Set base state;

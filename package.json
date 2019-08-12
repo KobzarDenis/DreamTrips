@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "rm -rf ./dist && gulp",
-    "start": "node --max-old-space-size=2048 ./dist/index.js",
+    "start": "node --max-old-space-size=2048 --inspect ./dist/index.js",
     "db_migrate": "npm i sequelize-cli && cd ./database && sequelize db:migrate"
   },
   "repository": {
@@ -46,6 +46,7 @@
   },
   "dependencies": {
     "ajv": "^6.2.0",
+    "automata": "^3.0.4",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",

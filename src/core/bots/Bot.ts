@@ -18,4 +18,17 @@ export abstract class Bot extends EventEmitter {
     console.log(`Income command - ${command}, from user - ${userId}`);
   }
 
+  /**
+   *
+   * @param {string} message - text message for user
+   * @return {Promise<void>}
+   */
+  public async sendText(message: string): Promise<void> {
+    console.log(message);
+  }
+
+  public async sendGreeting(name: string): Promise<void> {
+
+  }
+
 }
