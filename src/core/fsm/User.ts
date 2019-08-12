@@ -1,6 +1,6 @@
 import { State } from "./State";
 import { GreetingState } from "./Greeting.state";
-import { Bot } from "../bots/Bot";
+import { Bot } from "../bots";
 
 export class User {
 
