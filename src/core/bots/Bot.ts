@@ -1,20 +1,17 @@
 import { EventEmitter } from "events";
 
-export enum Command {
-  Start = '/start',
-  Help = '/help',
-  Subscribe = '/subscribe'
-}
 
-export type Message = {
-  chatId: string,
-  command: Command,
-  payload: any
+export type IncomingMessage = {
+  command: string,
+  payload: any,
+  chatId?: string,
+  chat?: any,
+  userId: string
 };
 
 export abstract class Bot extends EventEmitter {
 
-  public handleRequest(command: Command, userId) {
+  public handleRequest(command: string, userId) {
     console.log(`Income command - ${command}, from user - ${userId}`);
   }
 
@@ -27,8 +24,7 @@ export abstract class Bot extends EventEmitter {
     console.log(message);
   }
 
-  public async sendGreeting(name: string): Promise<void> {
-
-  }
+  public abstract async sendGreeting(data: IncomingMessage): Promise<void>;
+  public abstract async sendFirst(data: IncomingMessage): Promise<void>;
 
 }

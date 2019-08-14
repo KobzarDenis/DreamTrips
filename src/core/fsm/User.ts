@@ -1,6 +1,8 @@
 import { State } from "./State";
 import { GreetingState } from "./Greeting.state";
 import { Bot } from "../bots";
+import { Langs } from "@core/bots/translator";
+import { IncomingMessage } from "@core/bots/Bot";
 
 export class User {
 
@@ -12,12 +14,16 @@ export class User {
     return this._bot;
   };
 
+  public id: number;
   public name: string;
-  public email: string;
+  public lang: Langs;
   private _bot: Bot;
   private _currentState: State;
 
-  constructor(bot: Bot, state: State) {
+  constructor(id, name, lang, bot: Bot, state?: State) {
+    this.id = id;
+    this.name = name;
+    this.lang = lang;
     this._bot = bot;
     this._currentState = state ? state : new GreetingState();
   }
@@ -32,6 +38,10 @@ export class User {
     }
 
     this._currentState = state;
+  }
+
+  public async handleAction(data: IncomingMessage) {
+    await this._currentState.handleAction(this, data);
   }
 
   /**

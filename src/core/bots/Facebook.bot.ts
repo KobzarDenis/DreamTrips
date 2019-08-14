@@ -1,4 +1,5 @@
-import { Bot, Command, Message } from "@core/bots/Bot";
+import { Bot, IncomingMessage } from "@core/bots/Bot";
+import { Configurator, Command } from "@core/bots/Configurator";
 import { FacebookMessagingAPIClient, BUTTON_TYPE } from "fb-messenger-bot-api";
 import { ExpressServer } from "@core/servers/Express.server";
 import * as appconfig from "../../../appconfig";
@@ -25,7 +26,7 @@ export class FacebookBot extends Bot {
     const payload = parsed[1] ? parsed[1].split(' ').map(val => val.trim()) : null;
     const chatId = msg.senderId
 
-    const data: Message = {
+    const data: IncomingMessage = {
       chatId,
       command: parsed[0].trim(),
       payload //separated by "_" different command in each element
@@ -36,11 +37,11 @@ export class FacebookBot extends Bot {
     this.emit(data.command, data);
   }
 
-  public async subscribe(data: Message) {
+  public async subscribe(data: IncomingMessage) {
     await this.bot.sendTextMessage(data.chatId, `${data.chatId}, Вы можете поднять дохуя бабла.`);
   }
 
-  public async start(data: Message) {
+  public async start(data: IncomingMessage) {
     const buttons = [
       { type: BUTTON_TYPE.POSTBACK, title: 'Хочу детали', payload: Command.Help },
       { type: BUTTON_TYPE.POSTBACK, title: 'Подписаться', payload: Command.Subscribe }
@@ -49,7 +50,7 @@ export class FacebookBot extends Bot {
     this.bot.sendButtonsMessage(data.chatId, 'Выберите вариант:', buttons);
   }
 
-  public async help(data: Message) {
+  public async help(data: IncomingMessage) {
     const buttons = [
       { type: BUTTON_TYPE.POSTBACK, title: 'Как это работает ?', payload: Command.Help },
       { type: BUTTON_TYPE.POSTBACK, title: 'Что я могу с этим делать ?', payload: Command.Subscribe }

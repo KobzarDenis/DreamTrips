@@ -1,11 +1,16 @@
 import { User } from "./User";
 import { GreetingState } from "@core/fsm/Greeting.state";
+import { IncomingMessage } from "@core/bots/Bot";
 
 export enum StateName {
   Greeting = 'greeting'
 }
 
 export abstract class State {
+
+  protected constructor() {
+
+  }
 
   /**
    * State Factory
@@ -30,14 +35,14 @@ export abstract class State {
    * Handle user's action from one state to another
    * @param {User} user - instance of user
    */
-  public abstract handleAction(user: User): void;
+  public abstract async handleAction(user: User, data: IncomingMessage): Promise<void>;
 
   /**
    * Do action on current state
    * @param {User} user - instance of user
    * @return {Promise<void>}
    */
-  protected async abstract do(user: User): Promise<void>;
+  protected async abstract do(user: User, data: IncomingMessage): Promise<void>;
 
   /**
    * Change user's state after action

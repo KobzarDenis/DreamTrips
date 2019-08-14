@@ -1,13 +1,13 @@
-import { State } from "./State";
+import { User } from "@core/fsm/User";
 
 export class StateHolder {
+  private static usersPool: { [key: string]: User } = {};
 
-  private _state: State;
-
-  constructor() {
-    this._state = null; // Set base state;
+  public static getUser(key: string): User {
+    return StateHolder.usersPool[key];
   }
 
-
-
+  public static setUser(key: string, user: User) {
+    return StateHolder.usersPool[key] = user;
+  }
 }

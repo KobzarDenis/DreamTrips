@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { User } from "@core/models/user.model";
+import { UserModel } from "@core/models/user.model";
 import { createValidator } from "./user.validator";
 
 export class UserController {
@@ -10,7 +10,7 @@ export class UserController {
       throw new Error(errorMsg);
     }
 
-    const $user = new User(req.body);
+    const $user = new UserModel(req.body);
     await $user.save();
 
     //Todo:Send first email; start funnel;

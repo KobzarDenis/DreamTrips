@@ -20,7 +20,7 @@ import * as sequelize from "sequelize";
   tableName: "users",
   schema: "users"
 })
-export class User extends Model<User> {
+export class UserModel extends Model<UserModel> {
   @Column({
     unique: true,
     allowNull: true
@@ -55,6 +55,12 @@ export class User extends Model<User> {
     allowNull: true
   })
   public botSource: string;
+
+  @Column({
+    type: DataType.ENUM(["ua", "ru"]),
+    allowNull: true
+  })
+  public lang: string;
 
   @Column({
     type: DataType.STRING,
