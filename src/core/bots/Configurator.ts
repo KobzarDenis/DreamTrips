@@ -4,7 +4,8 @@ export enum Command {
   Start = '/start',
   Help = '/help',
   RemindMe = '/remindme',
-  Subscribe = '/subscribe'
+  Subscribe = '/subscribe',
+  Setup = '/setup'
 }
 
 export class Configurator {

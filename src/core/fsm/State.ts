@@ -1,5 +1,4 @@
 import { User } from "./User";
-import { GreetingState } from "@core/fsm/Greeting.state";
 import { IncomingMessage } from "@core/bots/Bot";
 
 export enum StateName {
@@ -8,28 +7,24 @@ export enum StateName {
 
 export abstract class State {
 
-  protected constructor() {
-
-  }
-
-  /**
-   * State Factory
-   * Create and return state depend on name
-   * @param {StateName} stateName - name of needed state
-   * @return {State}
-   */
-  public static createState(stateName: StateName): State {
-    let state: State;
-
-    switch (stateName) {
-      case StateName.Greeting:
-      default:
-        state = new GreetingState();
-        break;
-    }
-
-    return state;
-  }
+  // /**
+  //  * State Factory
+  //  * Create and return state depend on name
+  //  * @param {StateName} stateName - name of needed state
+  //  * @return {State}
+  //  */
+  // public static createState(stateName: StateName): State {
+  //   let state: State;
+  //
+  //   switch (stateName) {
+  //     case StateName.Greeting:
+  //     default:
+  //       state = new GreetingState();
+  //       break;
+  //   }
+  //
+  //   return state;
+  // }
 
   /**
    * Handle user's action from one state to another

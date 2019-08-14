@@ -1,11 +1,12 @@
 import { State } from "./State";
 import { User } from "./User";
 import { IncomingMessage } from "@core/bots/Bot";
+import { FirsPointState } from "@core/fsm/FirsPoint.state";
 
-export class GreetingState {
+export class GreetingState extends State{
 
   constructor() {
-    // super();
+    super();
   }
 
   public async handleAction(user: User, data: IncomingMessage): Promise<void> {
@@ -14,7 +15,7 @@ export class GreetingState {
 
   protected async do(user: User, data: IncomingMessage): Promise<void> {
     await user.bot.sendGreeting(data);
-    //super.changeState(user, this); //ToDo: Create next state!!!
+    super.changeState(user, new FirsPointState()); //ToDo: Create next state!!!
   }
 
 }

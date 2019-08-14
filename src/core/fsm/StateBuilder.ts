@@ -10,7 +10,7 @@ export class StateBuilder {
   public static async setup(firstName: string, lastName: string, lang: Langs, bot: Bot, botSource: string, botId: string, userId?: string) {
     let $user = await UserModel.findOne({ where: { [Op.or]: [{ uuid: userId }, { [Op.and]: { botId: botId.toString(), botSource } }] } });
 
-    if ($user) { // ToDo: Не надо обновлять если совпадения нашлись по боту
+    if ($user && ($user.botId != botId || $user.botSource != botSource || $user.lang != lang)) { // ToDo: Не надо обновлять если совпадения нашлись по боту
       await $user.update({ botSource, botId, lang });
     } else {
       $user = new UserModel({ firstName, lastName, botSource, botId, lang });

@@ -17,20 +17,29 @@ export class TelegramBot extends Bot {
 
   public init() {
     this.bot.on('message', this.onMessage.bind(this));
-    this.bot.on('callback_query', this.onMessage.bind(this));
+    this.bot.on('callback_query', this.onCallBack.bind(this));
     this.on(Command.Subscribe, this.subscribe.bind(this));
     this.on(Command.Start, this.start.bind(this));
     this.on(Command.Help, this.help.bind(this));
     this.on(Command.RemindMe, this.remindMe.bind(this));
-    this.on(Configurator.getButtonValue(Buttons.GOGOGO), this.setup.bind(this));
+    this.on(Command.Setup, this.setup.bind(this));
   }
 
   private async onMessage(msg: any) {
     const message = this.parseMessage(msg);
-
     console.log(`TELEGRAM Bot new message: ${message}`);
-
     this.emit(message.command, message);
+  }
+
+  private async onCallBack(msg: any) {
+    const message = this.parseMessage(msg);
+    console.log(`TELEGRAM Bot new callback: ${message}`);
+    if(message.command == Command.Setup) {
+      await this.setup(message);
+    } else {
+      const user = StateHolder.getUser(`${this.source}__${message.chat.id}`);
+      await user.handleAction(message);
+    }
   }
 
   private parseMessage(msg: any): IncomingMessage {
@@ -53,12 +62,11 @@ export class TelegramBot extends Bot {
 
   public async start(data: IncomingMessage) {
     const message = `Выберите язык: `;
-    const buttonValue = Configurator.getButtonValue(Buttons.GOGOGO);
     const options = {
       reply_markup: JSON.stringify({
         inline_keyboard: [
-          [{ text: 'Русский 🇷🇺', callback_data: `${buttonValue}:ru_${data.userId || 0}` }],
-          [{ text: 'Українська 🇺🇦', callback_data: `${buttonValue}:ua_${data.userId || 0}` }]
+          [{ text: 'Русский 🇷🇺', callback_data: `${Command.Setup}:ru_${data.userId || 0}` }],
+          [{ text: 'Українська 🇺🇦', callback_data: `${Command.Setup}:ua_${data.userId || 0}` }]
         ]
       })
     };
@@ -84,7 +92,10 @@ export class TelegramBot extends Bot {
     const options = {
       reply_markup: JSON.stringify({
         inline_keyboard: [
-          [{ text: Translator.getButtonText(user.lang, Buttons.GOGOGO), callback_data: Configurator.getButtonValue(Buttons.GOGOGO) }]
+          [{
+            text: Translator.getButtonText(user.lang, Buttons.GOGOGO),
+            callback_data: Configurator.getButtonValue(Buttons.GOGOGO)
+          }]
         ]
       }),
       resize_keyboard: true,
@@ -103,10 +114,22 @@ export class TelegramBot extends Bot {
     const options = {
       reply_markup: JSON.stringify({
         inline_keyboard: [
-          [{ text: Translator.getButtonText(user.lang, Buttons.ONES_PER_YEAR), callback_data: Configurator.getButtonValue(Buttons.ONES_PER_YEAR) }],
-          [{ text: Translator.getButtonText(user.lang, Buttons.THREE_TIMES_PER_YEAR), callback_data: Configurator.getButtonValue(Buttons.THREE_TIMES_PER_YEAR) }],
-          [{ text: Translator.getButtonText(user.lang, Buttons.MORE_OFTEN), callback_data: Configurator.getButtonValue(Buttons.MORE_OFTEN) }],
-          [{ text: Translator.getButtonText(user.lang, Buttons.HAVE_NEVER_TRAVELING), callback_data: Configurator.getButtonValue(Buttons.HAVE_NEVER_TRAVELING) }],
+          [{
+            text: Translator.getButtonText(user.lang, Buttons.ONES_PER_YEAR),
+            callback_data: Configurator.getButtonValue(Buttons.ONES_PER_YEAR)
+          }],
+          [{
+            text: Translator.getButtonText(user.lang, Buttons.THREE_TIMES_PER_YEAR),
+            callback_data: Configurator.getButtonValue(Buttons.THREE_TIMES_PER_YEAR)
+          }],
+          [{
+            text: Translator.getButtonText(user.lang, Buttons.MORE_OFTEN),
+            callback_data: Configurator.getButtonValue(Buttons.MORE_OFTEN)
+          }],
+          [{
+            text: Translator.getButtonText(user.lang, Buttons.HAVE_NEVER_TRAVELING),
+            callback_data: Configurator.getButtonValue(Buttons.HAVE_NEVER_TRAVELING)
+          }],
         ]
       }),
       resize_keyboard: true,
