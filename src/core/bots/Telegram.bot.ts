@@ -1,19 +1,34 @@
 import * as TelegramAPI from "node-telegram-bot-api";
-import { Bot, IncomingMessage } from "@core/bots/Bot";
+import { Bot, IncomingMessage, Button } from "@core/bots/Bot";
 import { Command, Configurator } from "@core/bots/Configurator";
-import { Buttons, Langs, Phrases, Translator } from "./translator";
+import { Buttons, Phrases, Translator } from "./translator";
 import { StateBuilder, StateHolder } from "@core/fsm";
 
 export class TelegramBot extends Bot {
 
-  private bot: TelegramAPI;
-  private readonly source: string;
+  public readonly source: string;
 
-  constructor(token: string) {
+  private bot: TelegramAPI;
+  public static _instance: TelegramBot;
+
+  private constructor(token: string) {
     super();
     this.bot = new TelegramAPI(token, { polling: true });
     this.source = "telegram";
   }
+
+  public static getInstance(token?: string): TelegramBot {
+    if (!TelegramBot._instance) {
+      if (!token) {
+        throw new Error(`Missing params`);
+      }
+
+      TelegramBot._instance = new TelegramBot(token);
+    }
+
+    return TelegramBot._instance;
+  }
+
 
   public init() {
     this.bot.on('message', this.onMessage.bind(this));
@@ -25,16 +40,60 @@ export class TelegramBot extends Bot {
     this.on(Command.Setup, this.setup.bind(this));
   }
 
+  public buttonsBuilder(template: Button | Button[]) {
+    if (template) {
+      const options = {
+        reply_markup: "{}",
+        resize_keyboard: true,
+        one_time_keyboard: true
+      };
+
+      const inline_keyboard: any[] = [];
+
+      if (Array.isArray(template)) {
+        template.forEach(b => {
+          inline_keyboard.push([{
+            text: b.text,
+            callback_data: b.value
+          }]);
+        })
+      } else {
+        inline_keyboard.push([{
+          text: template.text,
+          callback_data: template.value
+        }]);
+      }
+
+      options.reply_markup = JSON.stringify({ inline_keyboard });
+
+      return options;
+    }
+  }
+
+  public async sendMessage(chatId: string | number, message: string, buttons?: Button | Button[]): Promise<number> {
+    let msgId: number;
+
+    if (buttons) {
+      const options = this.buttonsBuilder(buttons);
+      msgId = await this.bot.sendMessage(chatId, message, options);
+    } else {
+      msgId = await this.bot.sendMessage(chatId, message);
+    }
+
+    return msgId;
+  }
+
   private async onMessage(msg: any) {
     const message = this.parseMessage(msg);
-    console.log(`TELEGRAM Bot new message: ${message}`);
+    console.log(`TELEGRAM Bot new message [chatId: ${message.chat.id}; name: ${message.chat.first_name} ${message.chat.last_name}]`);
+    console.log(`TELEGRAM Bot new message [command: ${message.command}; payload: ${JSON.stringify(message.payload)}]`);
     this.emit(message.command, message);
   }
 
   private async onCallBack(msg: any) {
     const message = this.parseMessage(msg);
     console.log(`TELEGRAM Bot new callback: ${message}`);
-    if(message.command == Command.Setup) {
+    if (message.command == Command.Setup) {
       await this.setup(message);
     } else {
       const user = StateHolder.getUser(`${this.source}__${message.chat.id}`);
@@ -83,65 +142,6 @@ export class TelegramBot extends Bot {
   public async setup(data: IncomingMessage) {
     await StateBuilder.setup(data.chat.first_name, data.chat.last_name, data.payload[0], this, this.source, data.chat.id, data.payload[1]);
   }
-
-  public async sendGreeting(data: IncomingMessage) {
-    const user = StateHolder.getUser(`${this.source}__${data.chat.id}`);
-
-    const message = Translator.getMessage(user.lang, Phrases.GREETING, [user.name]);
-
-    const options = {
-      reply_markup: JSON.stringify({
-        inline_keyboard: [
-          [{
-            text: Translator.getButtonText(user.lang, Buttons.GOGOGO),
-            callback_data: Configurator.getButtonValue(Buttons.GOGOGO)
-          }]
-        ]
-      }),
-      resize_keyboard: true,
-      one_time_keyboard: true
-    };
-
-    await this.bot.sendMessage(data.chat.id, message, options);
-  }
-
-  public async sendFirst(data: IncomingMessage) {
-    const user = StateHolder.getUser(`${this.source}__${data.chat.id}`);
-
-    const message1 = Translator.getMessage(user.lang, Phrases.INTRO);
-    const message2 = Translator.getMessage(user.lang, Phrases.HOW_OFTEN_DO_YOU_TRAVEL);
-
-    const options = {
-      reply_markup: JSON.stringify({
-        inline_keyboard: [
-          [{
-            text: Translator.getButtonText(user.lang, Buttons.ONES_PER_YEAR),
-            callback_data: Configurator.getButtonValue(Buttons.ONES_PER_YEAR)
-          }],
-          [{
-            text: Translator.getButtonText(user.lang, Buttons.THREE_TIMES_PER_YEAR),
-            callback_data: Configurator.getButtonValue(Buttons.THREE_TIMES_PER_YEAR)
-          }],
-          [{
-            text: Translator.getButtonText(user.lang, Buttons.MORE_OFTEN),
-            callback_data: Configurator.getButtonValue(Buttons.MORE_OFTEN)
-          }],
-          [{
-            text: Translator.getButtonText(user.lang, Buttons.HAVE_NEVER_TRAVELING),
-            callback_data: Configurator.getButtonValue(Buttons.HAVE_NEVER_TRAVELING)
-          }],
-        ]
-      }),
-      resize_keyboard: true,
-      one_time_keyboard: true
-    };
-
-    await this.bot.sendMessage(data.chat.id, message1);
-    setTimeout(async () => {
-      await this.bot.sendMessage(data.chat.id, message2, options);
-    }, 500);
-  }
-
 
   public async help(data: IncomingMessage) {
     const options = {

@@ -1,31 +1,29 @@
-import { State } from "./State";
-import { GreetingState } from "./Greeting.state";
+import { State, StateName, GreetingState } from "./states";
 import { Bot } from "../bots";
 import { Langs } from "@core/bots/translator";
 import { IncomingMessage } from "@core/bots/Bot";
 
+//ToDo: Create type file with bot types, message types
 export class User {
-
-  get state(): State {
-    return this._currentState;
-  };
-
-  get bot(): Bot {
-    return this._bot;
-  };
 
   public id: number;
   public name: string;
   public lang: Langs;
-  private _bot: Bot;
+  public readonly bot: Bot;
+  public readonly botId: string;
+  public readonly botSource: string;
+  public readonly currentStateName: StateName;
+
   private _currentState: State;
 
-  constructor(id, name, lang, bot: Bot, state?: State) {
+  constructor(id, name, lang, bot: Bot, botSource: string, botId: string, state?: State) {
     this.id = id;
     this.name = name;
     this.lang = lang;
-    this._bot = bot;
-    this._currentState = state ? state : new GreetingState();
+    this.bot = bot;
+    this.botSource = botSource;
+    this.botId = botId;
+    this._currentState = state ? state : GreetingState.getInstance();
   }
 
   /**
@@ -41,7 +39,11 @@ export class User {
   }
 
   public async handleAction(data: IncomingMessage) {
-    await this._currentState.handleAction(this, data);
+    try {
+      await this._currentState.handleAction(this, data);
+    } catch (e) {
+      console.log(`ERROR [handleAction]: ${e.message}`);
+    }
   }
 
   /**
@@ -49,14 +51,26 @@ export class User {
    * @param {string} message - text message
    */
   public async sendMessage(message: string): Promise<void> {
-    await this._bot.sendText(message);
+    try {
+      await this.bot.sendMessage(this.botId, message);
+    } catch (e) {
+      console.log(`ERROR [sendMessage]: ${e.message}`);
+    }
   }
 
   /**
    * Pack user's data for set in to temp DB
    */
   public pack(): string {
-    return "";
+    const dto = {
+      name: this.name,
+      lang: this.lang,
+      botSource: this.botSource,
+      botId: this.botId,
+      currentStateName: this.currentStateName
+    };
+
+    return JSON.stringify(dto);
   }
 
 }

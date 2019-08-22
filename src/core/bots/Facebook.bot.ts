@@ -8,6 +8,8 @@ export class FacebookBot extends Bot {
 
   private bot: FacebookMessagingAPIClient;
 
+  public readonly source = "facebook";
+
   constructor(token: string, server: ExpressServer) {
     super();
     //this.chats = null;

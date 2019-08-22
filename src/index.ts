@@ -18,7 +18,7 @@ sm.install();
     es.start();
 
     // new FacebookBot(appconfig.bot.facebook.token, es).init();
-    new TelegramBot(appconfig.bot.telegram.token).init();
+    TelegramBot.getInstance(appconfig.bot.telegram.token).init();
 
     const db = Database.getInstance(appconfig.database);
     db.injectModels(path.join(__dirname, "./core/models"));

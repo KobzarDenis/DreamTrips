@@ -47,6 +47,7 @@ export const buttons = {
   yes_i_have_a_question: 'Да, есть',
   no_i_know_who_you_are: 'Нет, я знаю кто вы! =)',
   hundred_percent: '100%',
+  im_not_sure: 'Не уверен/на...',
   first_variant: 'Первый вариант',
   second_variant: 'Второй вариант',
   third_variant: 'Третий вариант',

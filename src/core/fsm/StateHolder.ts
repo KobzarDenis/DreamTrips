@@ -10,4 +10,5 @@ export class StateHolder {
   public static setUser(key: string, user: User) {
     return StateHolder.usersPool.set(key, user);
   }
+
 }
