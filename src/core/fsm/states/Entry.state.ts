@@ -1,10 +1,12 @@
-import { State } from "./State";
+import { State, StateName } from "./State";
 import { User } from "../User";
 import { Bot, Button, IncomingMessage } from "@core/bots/Bot";
 import { AttractionFirstState } from "./AttractionFirst.state";
 import { Buttons, Phrases, Translator } from "@core/bots/translator";
 import { Configurator } from "@core/bots/Configurator";
+import { Options } from "../decorators";
 
+@Options(StateName.Entry)
 export class EntryState extends State {
 
   private static _instance: EntryState;
@@ -30,10 +32,10 @@ export class EntryState extends State {
         text: Translator.getButtonText(user.lang, Buttons.ONES_PER_YEAR),
         value: Configurator.getButtonValue(Buttons.ONES_PER_YEAR)
       },
-      {
-        text: Translator.getButtonText(user.lang, Buttons.THREE_TIMES_PER_YEAR),
-        value: Configurator.getButtonValue(Buttons.THREE_TIMES_PER_YEAR)
-      },
+      // {
+      //   text: Translator.getButtonText(user.lang, Buttons.THREE_TIMES_PER_YEAR),
+      //   value: Configurator.getButtonValue(Buttons.THREE_TIMES_PER_YEAR)
+      // },
       {
         text: Translator.getButtonText(user.lang, Buttons.MORE_OFTEN),
         value: Configurator.getButtonValue(Buttons.MORE_OFTEN)
@@ -47,7 +49,7 @@ export class EntryState extends State {
     await user.bot.sendMessage(user.botId, msg);
     setTimeout(async () => {
       await user.bot.sendMessage(user.botId, question, buttons);
-      super.changeState(user, AttractionFirstState.getInstance());
+      await super.changeState(user, AttractionFirstState.getInstance());
     }, Bot.MID_PAUSE_MS);
   }
 

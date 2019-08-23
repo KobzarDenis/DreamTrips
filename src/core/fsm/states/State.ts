@@ -1,12 +1,17 @@
 import { User } from "../User";
 import { IncomingMessage } from "@core/bots/Bot";
+import { Redis } from "@core/Redis";
 
 export enum StateName {
   Greeting = 'greeting',
   Entry = 'entry',
   AttractionFirst = 'attractionFirst',
   AttractionSecond = 'attractionSecond',
-  Intro = 'intro'
+  Intro = 'intro',
+  WhoWeAre = 'whoWeAre',
+  Presentation = 'presentation',
+  ChoseVariant = 'choseVariant',
+  Objections = 'objections'
 }
 
 export abstract class State {
@@ -35,8 +40,9 @@ export abstract class State {
    * @param {User} user - instance of user
    * @param {State} newState - instance of state
    */
-  protected changeState(user: User, newState: State): void {
+  protected async changeState(user: User, newState: State): void {
     user.setState(newState);
+    await Redis.getInstance().setItem(`${user.botSource}__${user.botId}`, user.pack(), Redis.WEEK_TTL);
   }
 
 }

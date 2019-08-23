@@ -1,20 +1,22 @@
-import { Bot, IncomingMessage } from "@core/bots/Bot";
-import { Configurator, Command } from "@core/bots/Configurator";
-import { FacebookMessagingAPIClient, BUTTON_TYPE } from "fb-messenger-bot-api";
+import { Bot, BotName, Button, IncomingMessage } from "@core/bots/Bot";
+import { Command } from "@core/bots/Configurator";
+import { FacebookMessagingAPIClient, BUTTON_TYPE, IButton } from "fb-messenger-bot-api";
 import { ExpressServer } from "@core/servers/Express.server";
 import * as appconfig from "../../../appconfig";
+import * as bluebird from "bluebird";
 
 export class FacebookBot extends Bot {
 
-  private bot: FacebookMessagingAPIClient;
+  public readonly source: BotName;
 
-  public readonly source = "facebook";
+  private bot: FacebookMessagingAPIClient;
+  public static _instance: FacebookBot;
 
   constructor(token: string, server: ExpressServer) {
     super();
-    //this.chats = null;
     this.bot = new FacebookMessagingAPIClient(token);
     this.createHandler(server);
+    this.source = BotName.Facebook;
   }
 
   public init() {
@@ -23,33 +25,86 @@ export class FacebookBot extends Bot {
     this.on(Command.Help, this.help.bind(this));
   }
 
-  private async onMessage(msg) {
-    const parsed = msg.data.split(':');
-    const payload = parsed[1] ? parsed[1].split(' ').map(val => val.trim()) : null;
-    const chatId = msg.senderId
+  public static getInstance(token?: string, server?: ExpressServer): FacebookBot {
+    if (!FacebookBot._instance) {
+      if (!token || !server) {
+        throw new Error(`Missing params`);
+      }
 
-    const data: IncomingMessage = {
-      chatId,
-      command: parsed[0].trim(),
-      payload //separated by "_" different command in each element
+      FacebookBot._instance = new FacebookBot(token, server);
+    }
+
+    return FacebookBot._instance;
+  }
+
+  public buttonsBuilder(template: Button | Button[]) {
+    if (template) {
+      const options: any[] = [];
+
+      if (Array.isArray(template)) {
+        template.forEach(b => {
+          options.push({
+            type: BUTTON_TYPE.POSTBACK,
+            title: b.text,
+            payload: b.value
+          });
+        })
+      } else {
+        options.push({
+          type: BUTTON_TYPE.POSTBACK,
+          title: template.text,
+          payload: template.value
+        });
+      }
+
+      return options;
+    }
+  }
+
+  protected parseMessage(msg): IncomingMessage {
+    const parsed = msg.data.split(':');
+    const commandAndId = parsed[0].split(' ');
+
+    const message: IncomingMessage = {
+      chat: {
+        id: msg.senderId,
+        source: this.source,
+        firstName: msg.first_name,
+        lastName: msg.last_name
+      },
+      command: commandAndId[0].trim(),
+      userId: commandAndId.length > 1 ? commandAndId[1].trim() : null,
+      payload: parsed[1] ? parsed[1].split('_').map(val => val.trim()) : null
     };
 
-    console.log(`FB Bot new message: ${data}`);
-
-    this.emit(data.command, data);
+    return message;
   }
 
   public async subscribe(data: IncomingMessage) {
-    await this.bot.sendTextMessage(data.chatId, `${data.chatId}, Вы можете поднять дохуя бабла.`);
+    await this.bot.sendTextMessage(data.chat.id, `${data.chat.id}, Вы можете поднять дохуя бабла.`);
   }
 
   public async start(data: IncomingMessage) {
+    const message = `Выберите язык: `;
     const buttons = [
-      { type: BUTTON_TYPE.POSTBACK, title: 'Хочу детали', payload: Command.Help },
-      { type: BUTTON_TYPE.POSTBACK, title: 'Подписаться', payload: Command.Subscribe }
+      { type: BUTTON_TYPE.POSTBACK, title: 'Русский 🇷🇺', payload: `${Command.Setup}:ru_${data.userId || 0}` },
+      { type: BUTTON_TYPE.POSTBACK, title: 'Українська 🇺🇦', payload: `${Command.Setup}:ua_${data.userId || 0}` }
     ];
 
-    this.bot.sendButtonsMessage(data.chatId, 'Выберите вариант:', buttons);
+    this.bot.sendButtonsMessage(data.chat.id, message, buttons);
+  }
+
+  public async sendMessage(chatId: string | number, message: string, buttons?: Button | Button[]): Promise<number> {
+    let msgId: number = 0;
+
+    if (buttons) {
+      const options = this.buttonsBuilder(buttons);
+      await this.bot.sendButtonsMessage(<string> chatId, message, <IButton []> options);
+    } else {
+      await this.bot.sendTextMessage(<string> chatId, message);
+    }
+
+    return msgId;
   }
 
   public async help(data: IncomingMessage) {
@@ -58,7 +113,7 @@ export class FacebookBot extends Bot {
       { type: BUTTON_TYPE.POSTBACK, title: 'Что я могу с этим делать ?', payload: Command.Subscribe }
     ];
 
-    this.bot.sendButtonsMessage(data.chatId, 'Выберите Ваш вопрос:', buttons);
+    this.bot.sendButtonsMessage(data.chat.id, 'Выберите Ваш вопрос:', buttons);
   }
 
   private createHandler(server: ExpressServer) {
@@ -82,23 +137,40 @@ export class FacebookBot extends Bot {
       try {
         if (body.object === 'page') {
 
-          body.entry.forEach((entry) => {
+          body.entry.forEach(async (entry) => {
             let event = entry.messaging[0];
 
             if (event.message) {
-              const msg = {
-                senderId: event.sender.id,
-                data: event.message.text
-              };
-              this.onMessage(msg);
-            } else if (event.postback) {
-              const msg = {
-                senderId: event.sender.id,
-                data: event.postback.payload
-              };
-              this.onMessage(msg);
-            }
 
+              const profile = <any> await this.bot.getUserProfile(event.sender.id, ["first_name", "last_name"]);
+
+              const msg = {
+                senderId: event.sender.id,
+                data: event.message.text,
+                first_name: profile.first_name,
+                last_name: profile.last_name
+              };
+
+              const message = this.parseMessage(msg);
+              await super.onMessage(message);
+            } else if (event.postback) {
+              const profile = <any> await this.bot.getUserProfile(event.sender.id, ["first_name", "last_name"]);
+              const msg = {
+                senderId: event.sender.id,
+                data: event.postback.payload,
+                first_name: profile.first_name,
+                last_name: profile.last_name
+              };
+
+              const message = this.parseMessage(msg);
+              if(message.command === Command.Start) {
+                await super.onMessage(message);
+              } else {
+                await super.onCallBack(message);
+              }
+            } else {
+              console.log(`UNKNOWN EVENT FROM FB: [${event}]`);
+            }
           });
 
           res.status(200).send('EVENT_RECEIVED');

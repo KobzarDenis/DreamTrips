@@ -1,12 +1,10 @@
 import * as TelegramAPI from "node-telegram-bot-api";
-import { Bot, IncomingMessage, Button } from "@core/bots/Bot";
-import { Command, Configurator } from "@core/bots/Configurator";
-import { Buttons, Phrases, Translator } from "./translator";
-import { StateBuilder, StateHolder } from "@core/fsm";
+import { Bot, IncomingMessage, Button, BotName } from "@core/bots/Bot";
+import { Command } from "@core/bots/Configurator";
 
 export class TelegramBot extends Bot {
 
-  public readonly source: string;
+  public readonly source: BotName;
 
   private bot: TelegramAPI;
   public static _instance: TelegramBot;
@@ -14,7 +12,7 @@ export class TelegramBot extends Bot {
   private constructor(token: string) {
     super();
     this.bot = new TelegramAPI(token, { polling: true });
-    this.source = "telegram";
+    this.source = BotName.Telegram;
   }
 
   public static getInstance(token?: string): TelegramBot {
@@ -31,8 +29,14 @@ export class TelegramBot extends Bot {
 
 
   public init() {
-    this.bot.on('message', this.onMessage.bind(this));
-    this.bot.on('callback_query', this.onCallBack.bind(this));
+    this.bot.on('message', async (msg) => {
+      const parsedMessage: IncomingMessage = this.parseMessage(msg);
+      await super.onMessage(parsedMessage);
+    });
+    this.bot.on('callback_query', async (msg) => {
+      const parsedMessage: IncomingMessage = this.parseMessage(msg);
+      await super.onCallBack(parsedMessage);
+    });
     this.on(Command.Subscribe, this.subscribe.bind(this));
     this.on(Command.Start, this.start.bind(this));
     this.on(Command.Help, this.help.bind(this));
@@ -83,30 +87,19 @@ export class TelegramBot extends Bot {
     return msgId;
   }
 
-  private async onMessage(msg: any) {
-    const message = this.parseMessage(msg);
-    console.log(`TELEGRAM Bot new message [chatId: ${message.chat.id}; name: ${message.chat.first_name} ${message.chat.last_name}]`);
-    console.log(`TELEGRAM Bot new message [command: ${message.command}; payload: ${JSON.stringify(message.payload)}]`);
-    this.emit(message.command, message);
-  }
-
-  private async onCallBack(msg: any) {
-    const message = this.parseMessage(msg);
-    console.log(`TELEGRAM Bot new callback: ${message}`);
-    if (message.command == Command.Setup) {
-      await this.setup(message);
-    } else {
-      const user = StateHolder.getUser(`${this.source}__${message.chat.id}`);
-      await user.handleAction(message);
-    }
-  }
-
-  private parseMessage(msg: any): IncomingMessage {
+  protected parseMessage(msg: any): IncomingMessage {
     const parsed = msg.text ? msg.text.split(':') : msg.data.split(':');
     const commandAndId = parsed[0].split(' ');
 
+    const chat = msg.chat || msg.message.chat;
+
     let message: IncomingMessage = {
-      chat: msg.chat || msg.message.chat,
+      chat: {
+        id: chat.id,
+        source: this.source,
+        firstName: chat.first_name,
+        lastName: chat.last_name
+      },
       command: commandAndId[0].trim(),
       userId: commandAndId.length > 1 ? commandAndId[1].trim() : null,
       payload: parsed[1] ? parsed[1].split('_').map(val => val.trim()) : null
@@ -137,10 +130,6 @@ export class TelegramBot extends Bot {
     const message = `Ok, ${data.chat.first_name}. I'm gonna remind you about next meting`;
 
     await this.bot.sendMessage(data.chat.id, message);
-  }
-
-  public async setup(data: IncomingMessage) {
-    await StateBuilder.setup(data.chat.first_name, data.chat.last_name, data.payload[0], this, this.source, data.chat.id, data.payload[1]);
   }
 
   public async help(data: IncomingMessage) {

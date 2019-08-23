@@ -9,12 +9,11 @@ export class User {
   public id: number;
   public name: string;
   public lang: Langs;
-  public readonly bot: Bot;
+  public bot: Bot;
   public readonly botId: string;
   public readonly botSource: string;
-  public readonly currentStateName: StateName;
-
   private _currentState: State;
+  private _currentStateName: StateName;
 
   constructor(id, name, lang, bot: Bot, botSource: string, botId: string, state?: State) {
     this.id = id;
@@ -24,6 +23,7 @@ export class User {
     this.botSource = botSource;
     this.botId = botId;
     this._currentState = state ? state : GreetingState.getInstance();
+    this._currentStateName = this._currentState.name;
   }
 
   /**
@@ -36,6 +36,7 @@ export class User {
     }
 
     this._currentState = state;
+    this._currentStateName = state.name;
   }
 
   public async handleAction(data: IncomingMessage) {
@@ -63,11 +64,12 @@ export class User {
    */
   public pack(): string {
     const dto = {
+      id: this.id,
       name: this.name,
       lang: this.lang,
       botSource: this.botSource,
       botId: this.botId,
-      currentStateName: this.currentStateName
+      currentStateName: this._currentStateName
     };
 
     return JSON.stringify(dto);

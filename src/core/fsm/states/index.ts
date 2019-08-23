@@ -4,3 +4,7 @@ export * from "./Entry.state";
 export * from "./AttractionFirst.state";
 export * from "./AttractionSecond.state";
 export * from "./Intro.state";
+export * from "./WhoWeAre.state";
+export * from "./Presentation.state";
+export * from "./ChoseVariant.state";
+export * from "./Objections.state";

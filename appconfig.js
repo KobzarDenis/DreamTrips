@@ -16,6 +16,9 @@ module.exports = {
             ssl: process.env.NODE_ENV !== 'dev'
         }
     },
+    redis: {
+        url: process.env.REDIS_URL || "redis://127.0.0.1:6379"
+    },
     bot: {
         telegram: {
             token: process.env.TELEGRAM_TOKEN || '884983109:AAE-XHsnKpBt-GOy8_EZcdzpZY4VOKRVcV8'

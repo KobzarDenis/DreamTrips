@@ -1,11 +1,13 @@
 import { User } from "../User";
-import { State } from "./State";
+import { State, StateName } from "./State";
 import { Bot, Button, IncomingMessage } from "@core/bots/Bot";
 import { Configurator } from "@core/bots/Configurator";
 import { Buttons, Phrases, Translator } from "@core/bots/translator";
 import { ChoseVariantState } from "./ChoseVariant.state";
 import { ObjectionsState } from "./Objections.state";
+import { Options } from "../decorators";
 
+@Options(StateName.Presentation)
 export class PresentationState extends State {
   private static _instance: State;
 
@@ -31,11 +33,11 @@ export class PresentationState extends State {
         await this.sendForKnowing(user);
         break;
       case Configurator.getButtonValue(Buttons.HUNDRED_PERCENT):
-        super.changeState(user, ChoseVariantState.getInstance());
+        await super.changeState(user, ChoseVariantState.getInstance());
         await user.handleAction(data);
         break;
       case Configurator.getButtonValue(Buttons.IM_NOT_SURE):
-        super.changeState(user, ObjectionsState.getInstance());
+        await super.changeState(user, ObjectionsState.getInstance());
         await user.handleAction(data);
         break;
     }

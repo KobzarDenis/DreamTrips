@@ -1,9 +1,11 @@
 import { User } from "../User";
-import { State } from "./State";
+import { State, StateName } from "./State";
 import { Button, IncomingMessage } from "@core/bots/Bot";
 import { Configurator } from "@core/bots/Configurator";
 import { Buttons, Phrases, Translator } from "@core/bots/translator";
+import { Options } from "../decorators";
 
+@Options(StateName.ChoseVariant)
 export class ChoseVariantState extends State {
   private static _instance: State;
 

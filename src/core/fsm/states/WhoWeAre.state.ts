@@ -1,10 +1,12 @@
 import { User } from "../User";
-import { State } from "./State";
+import { State, StateName } from "./State";
 import { Button, IncomingMessage } from "@core/bots/Bot";
 import { Buttons, Phrases, Translator } from "@core/bots/translator";
 import { Configurator } from "@core/bots/Configurator";
 import { PresentationState } from "./Presentation.state";
+import { Options } from "../decorators";
 
+@Options(StateName.WhoWeAre)
 export class WhoWeAreState extends State {
   private static _instance: State;
 
@@ -35,6 +37,6 @@ export class WhoWeAreState extends State {
     ];
 
     await user.bot.sendMessage(user.botId, question, buttons);
-    super.changeState(user, PresentationState.getInstance());
+    await super.changeState(user, PresentationState.getInstance());
   }
 }
