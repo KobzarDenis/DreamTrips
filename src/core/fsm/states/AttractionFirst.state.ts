@@ -55,7 +55,9 @@ export class AttractionFirstState extends State {
     ];
 
     await user.bot.sendMessage(user.botId, msg);
+    await user.bot.typingOn(user.botId);
     setTimeout(async () => {
+      await user.bot.typingOff(user.botId);
       await user.bot.sendMessage(user.botId, question, buttons);
       await super.changeState(user, AttractionSecondState.getInstance());
     }, Bot.SHORT_PAUSE_MS);

@@ -108,6 +108,14 @@ export class TelegramBot extends Bot {
     return message;
   }
 
+  public async typingOn(chatId: string): Promise<any> {
+    await this.bot.sendChatAction(chatId, 'typing');
+  }
+
+  public async typingOff(chatId: string): Promise<any> {
+    //await this.bot.sendChatAction(chatId, 'typing');
+  }
+
   public async subscribe(data: IncomingMessage) {
     await this.bot.sendMessage(data.chat.id, `${data.chat.first_name}, Вы можете поднять дохуя бабла.`);
   }

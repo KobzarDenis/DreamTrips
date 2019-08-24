@@ -56,6 +56,9 @@ export abstract class Bot extends EventEmitter {
 
   protected abstract parseMessage(msg: any): IncomingMessage;
 
+  public abstract async typingOn(chatId: string);
+  public abstract async typingOff(chatId: string);
+
   protected abstract buttonsBuilder(template: Button | Button[]);
 
   public abstract async sendMessage(chatId: string | number, message: string, buttons?: Button | Button[]): Promise<number>;

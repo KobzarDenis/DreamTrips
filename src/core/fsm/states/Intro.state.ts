@@ -35,13 +35,21 @@ export class IntroState extends State {
     };
 
     await user.bot.sendMessage(user.botId, prepare);
+    await user.bot.typingOn(user.botId);
     setTimeout(async () => {
+      await user.bot.typingOff(user.botId);
       await user.bot.sendMessage(user.botId, opening);
+      await user.bot.typingOn(user.botId);
       setTimeout(async () => {
+        await user.bot.typingOff(user.botId);
         await user.bot.sendMessage(user.botId, video);
+        await user.bot.typingOn(user.botId);
         setTimeout(async () => {
+          await user.bot.typingOff(user.botId);
           await user.bot.sendMessage(user.botId, link);
+          await user.bot.typingOn(user.botId);
           setTimeout(async () => {
+            await user.bot.typingOff(user.botId);
             await user.bot.sendMessage(user.botId, question, buttons);
             await super.changeState(user, WhoWeAreState.getInstance());
           }, Bot.LONG_PAUSE_MS);

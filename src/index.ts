@@ -28,9 +28,7 @@ sm.install();
     db.injectModels(path.join(__dirname, "./core/models"));
 
     botRelation[BotName.Facebook] = FacebookBot.getInstance();
-
-    StateHolder.bots = botRelation;
-    StateHolder.states = stateRelation;
+    StateHolder.init(botRelation, stateRelation);
 
   } catch (error) {
     throw new Error(error.message);

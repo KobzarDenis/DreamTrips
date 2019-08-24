@@ -56,9 +56,13 @@ export class PresentationState extends State {
     const presentationPart3 = Translator.getMessage(user.lang, Phrases.PRESENTATION_3);
 
     await user.bot.sendMessage(user.botId, presentationPart1);
+    await user.bot.typingOn(user.botId);
     setTimeout(async () => {
+      await user.bot.typingOff(user.botId);
       await user.bot.sendMessage(user.botId, presentationPart2);
+      await user.bot.typingOn(user.botId);
       setTimeout(async () => {
+        await user.bot.typingOff(user.botId);
         await user.bot.sendMessage(user.botId, presentationPart3);
         await this.sendQuestion(user);
       }, Bot.LONG_PAUSE_MS);

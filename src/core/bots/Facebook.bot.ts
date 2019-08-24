@@ -3,7 +3,6 @@ import { Command } from "@core/bots/Configurator";
 import { FacebookMessagingAPIClient, BUTTON_TYPE, IButton } from "fb-messenger-bot-api";
 import { ExpressServer } from "@core/servers/Express.server";
 import * as appconfig from "../../../appconfig";
-import * as bluebird from "bluebird";
 
 export class FacebookBot extends Bot {
 
@@ -78,6 +77,14 @@ export class FacebookBot extends Bot {
     };
 
     return message;
+  }
+
+  public async typingOn(chatId: string): Promise<any> {
+    await this.bot.toggleTyping(chatId, true);
+  }
+
+  public async typingOff(chatId: string): Promise<any> {
+    await this.bot.toggleTyping(chatId, false);
   }
 
   public async subscribe(data: IncomingMessage) {

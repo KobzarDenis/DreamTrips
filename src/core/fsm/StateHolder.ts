@@ -3,8 +3,13 @@ import { Redis } from "@core/Redis";
 
 export class StateHolder {
 
-  public static bots;
-  public static states;
+  private static bots;
+  private static states;
+
+  public static init(bots, states) {
+    StateHolder.bots = bots;
+    StateHolder.states = states;
+  }
 
   public static async getUser(key: string): Promise<User> {
     const dto = JSON.parse(await Redis.getInstance().getItem(key));
