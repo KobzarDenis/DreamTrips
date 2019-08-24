@@ -1,6 +1,6 @@
 import { Bot, BotName, Button, IncomingMessage } from "@core/bots/Bot";
 import { Command } from "@core/bots/Configurator";
-import { FacebookMessagingAPIClient, BUTTON_TYPE, IButton } from "fb-messenger-bot-api";
+import { BUTTON_TYPE, FacebookMessagingAPIClient, IButton } from "fb-messenger-bot-api";
 import { ExpressServer } from "@core/servers/Express.server";
 import * as appconfig from "../../../appconfig";
 
@@ -85,6 +85,28 @@ export class FacebookBot extends Bot {
 
   public async typingOff(chatId: string): Promise<any> {
     await this.bot.toggleTyping(chatId, false);
+  }
+
+  async sendSocialLinks(chatId: string): Promise<any> {
+    const buttons = [
+      {
+        type: BUTTON_TYPE.URL,
+        title: "Telegram",
+        url: appconfig.socialLinks.telegram
+      },
+      {
+        type: BUTTON_TYPE.URL,
+        title: "Facebook",
+        url: appconfig.socialLinks.facebook
+      },
+      {
+        type: BUTTON_TYPE.URL,
+        title: "Instagram",
+        url: appconfig.socialLinks.instagram
+      }
+    ];
+
+    await this.bot.sendButtonsMessage(chatId, "Apply now!", buttons);
   }
 
   public async subscribe(data: IncomingMessage) {
