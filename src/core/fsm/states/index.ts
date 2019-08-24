@@ -8,3 +8,4 @@ export * from "./WhoWeAre.state";
 export * from "./Presentation.state";
 export * from "./ChoseVariant.state";
 export * from "./Objections.state";
+export * from "./Invitaion.state";

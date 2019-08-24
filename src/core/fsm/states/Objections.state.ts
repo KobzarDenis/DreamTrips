@@ -4,6 +4,7 @@ import { Button, IncomingMessage } from "@core/bots/Bot";
 import { Configurator } from "@core/bots/Configurator";
 import { Buttons, Phrases, Translator } from "@core/bots/translator";
 import { Options } from "../decorators";
+import { InvitaionState } from "./Invitaion.state";
 
 @Options(StateName.Objections)
 export class ObjectionsState extends State {
@@ -36,5 +37,6 @@ export class ObjectionsState extends State {
     ];
 
     await user.bot.sendMessage(user.botId, question, buttons);
+    await super.changeState(user, InvitaionState.getInstance());
   }
 }

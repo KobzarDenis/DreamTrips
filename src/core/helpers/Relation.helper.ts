@@ -11,7 +11,8 @@ export const stateRelation = {
   [states.StateName.WhoWeAre]: states.WhoWeAreState.getInstance(),
   [states.StateName.Presentation]: states.PresentationState.getInstance(),
   [states.StateName.ChoseVariant]: states.ChoseVariantState.getInstance(),
-  [states.StateName.Objections]: states.ObjectionsState.getInstance()
+  [states.StateName.Objections]: states.ObjectionsState.getInstance(),
+  [states.StateName.Invitation]: states.InvitaionState.getInstance()
 };
 
 export const botRelation = {

@@ -58,6 +58,7 @@ export enum Buttons {
   NOT_ENOUGH_INFO = 'not_enough_info',
   NOON = 'noon',
   EVENING = 'evening',
+  I_WONT_COMING = 'i_wont_coming',
   I_WONT_BE_ABLE_AT_THIS_DAY = 'i_wont_be_able_at_this_day',
   I_WONT_BE_ABLE_AT_THIS_TIME = 'i_wont_be_able_at_this_time',
   EMAIL = 'email',

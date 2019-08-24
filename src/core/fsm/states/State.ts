@@ -11,7 +11,8 @@ export enum StateName {
   WhoWeAre = 'whoWeAre',
   Presentation = 'presentation',
   ChoseVariant = 'choseVariant',
-  Objections = 'objections'
+  Objections = 'objections',
+  Invitation = 'invitation'
 }
 
 export abstract class State {

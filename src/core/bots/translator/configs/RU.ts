@@ -55,6 +55,7 @@ export const buttons = {
   not_enough_info: 'Мало информации',
   noon: '12.00',
   evening: '20.00',
+  i_wont_coming: 'Я не приду',
   i_wont_be_able_at_this_day: 'Не могу в этот день',
   i_wont_be_able_at_this_time: 'Не могу в это время',
   email: 'Email',

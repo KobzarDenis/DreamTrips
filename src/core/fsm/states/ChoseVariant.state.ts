@@ -4,6 +4,7 @@ import { Button, IncomingMessage } from "@core/bots/Bot";
 import { Configurator } from "@core/bots/Configurator";
 import { Buttons, Phrases, Translator } from "@core/bots/translator";
 import { Options } from "../decorators";
+import { InvitaionState } from "./Invitaion.state";
 
 @Options(StateName.ChoseVariant)
 export class ChoseVariantState extends State {
@@ -40,6 +41,6 @@ export class ChoseVariantState extends State {
     ];
 
     await user.bot.sendMessage(user.botId, question, buttons);
-    //super.changeState(user, AttractionSecondState.getInstance());
+    super.changeState(user, InvitaionState.getInstance());
   }
 }

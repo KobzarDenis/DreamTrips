@@ -31,6 +31,7 @@ export class Configurator {
     [Buttons.NOT_ENOUGH_INFO]: '/too-little-info',
     [Buttons.NOON]: '/noon-meeting',
     [Buttons.EVENING]: '/evening-meeting',
+    [Buttons.I_WONT_COMING]: '/i-wont-coming',
     [Buttons.I_WONT_BE_ABLE_AT_THIS_DAY]: '/not-that-day',
     [Buttons.I_WONT_BE_ABLE_AT_THIS_TIME]: '/not-that-time',
     [Buttons.EMAIL]: '/email',
