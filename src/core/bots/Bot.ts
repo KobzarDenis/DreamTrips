@@ -58,6 +58,7 @@ export abstract class Bot extends EventEmitter {
 
   public abstract async typingOn(chatId: string);
   public abstract async typingOff(chatId: string);
+  public abstract async sendSocialLinks(chatId: string);
 
   protected abstract buttonsBuilder(template: Button | Button[]);
 

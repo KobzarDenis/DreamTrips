@@ -4,6 +4,7 @@ import { Bot, Button, IncomingMessage } from "@core/bots/Bot";
 import { Configurator } from "@core/bots/Configurator";
 import { Buttons, Phrases, Translator } from "@core/bots/translator";
 import { Options } from "../decorators";
+import { AcceptionState } from "@core/fsm/states/Acception.state";
 
 @Options(StateName.Invitation)
 export class InvitaionState extends State {
@@ -27,22 +28,28 @@ export class InvitaionState extends State {
     switch (data.command) {
       case Configurator.getButtonValue(Buttons.FIRST_VARIANT):
         message = Translator.getMessage(user.lang, Phrases.ONLY_TRAVELING_MEETING);
+        await this.sendInvite(user, message);
         break;
       case Configurator.getButtonValue(Buttons.SECOND_VARIANT):
         message = Translator.getMessage(user.lang, Phrases.ONLY_BUSINESS_MEETING);
+        await this.sendInvite(user, message);
         break;
       case Configurator.getButtonValue(Buttons.THIRD_VARIANT):
         message = Translator.getMessage(user.lang, Phrases.BOTH_TRAVELING_AND_BUSINESS_MEETING);
+        await this.sendInvite(user, message);
         break;
       case Configurator.getButtonValue(Buttons.TOO_CONFUSING):
       case Configurator.getButtonValue(Buttons.NOT_ENOUGH_INFO):
         message = Translator.getMessage(user.lang, Phrases.ITS_NOT_A_BIG_DEAL);
+        await this.sendInvite(user, message);
         break;
       default:
-        message = "Choose your variant please...";
+        await this.processAnswer(user, data);
         break;
     }
+  }
 
+  private async sendInvite(user: User, message: string) {
     const question = Translator.getMessage(user.lang, Phrases.CLOSEST_MEETING);
     const buttons: Button[] = [
       {
@@ -66,6 +73,23 @@ export class InvitaionState extends State {
       await user.bot.sendMessage(user.botId, question, buttons);
       await user.bot.typingOn(user.botId);
     }, Bot.MID_PAUSE_MS);
+  }
+
+  private async processAnswer(user: User, data: IncomingMessage) {
+    switch (data.command) {
+      case Configurator.getButtonValue(Buttons.NOON):
+      case Configurator.getButtonValue(Buttons.EVENING):
+        await super.changeState(user, AcceptionState.getInstance());
+        await user.handleAction(data);
+        break;
+      case Configurator.getButtonValue(Buttons.I_WONT_COMING):
+        const message = Translator.getMessage(user.lang, Phrases.WHY_YOU_WONT_TO_COME);
+        await user.bot.sendMessage(user.botId, message);
+        break;
+      default:
+        await user.bot.sendMessage(user.botId, `${user.name}, choose your variant please...`);
+        break;
+    }
   }
 
 }

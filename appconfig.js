@@ -27,5 +27,10 @@ module.exports = {
             verifyToken: process.env.FACEBOOK_VERIFY_TOKEN || 'tVchDbGwSKHM8VF', // My own token
             token: process.env.FACEBOOK_TOKEN || 'EAAM4dKJ0lCcBAKPqdIYo4MUwHYub0N9g3SZB9rB06T5iO4Yr8jUHxrOnn0oLCx4kS6qVWA2juAe9b2eezCP0AQmfyfubATc78l8tpuEjaLZAZAn2Xt1KPa1VC8iZBDGC6qOw7Be4okKh42daJSJ3PeF0AdNmimZBOmTNJkMpRFQZDZD'
         }
+    },
+    socialLinks: {
+        telegram: process.env.TELEGRAM_LINK || "https://t.me/dream_trips_team",
+        facebook: process.env.FACEBOOK_LINK || "https://www.facebook.com/devtestpageme/",
+        instagram: process.env.INSTAGRAM_LINK || "https://www.instagram.com/d.kobzar/"
     }
 };

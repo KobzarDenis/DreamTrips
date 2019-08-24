@@ -1,6 +1,7 @@
 import * as TelegramAPI from "node-telegram-bot-api";
 import { Bot, IncomingMessage, Button, BotName } from "@core/bots/Bot";
 import { Command } from "@core/bots/Configurator";
+import * as appconfig from "../../../appconfig";
 
 export class TelegramBot extends Bot {
 
@@ -114,6 +115,29 @@ export class TelegramBot extends Bot {
 
   public async typingOff(chatId: string): Promise<any> {
     //await this.bot.sendChatAction(chatId, 'typing');
+  }
+
+  async sendSocialLinks(chatId: string): Promise<any> {
+    const options = {
+      reply_markup: JSON.stringify([
+        [{
+          text: "Telegram",
+          url: appconfig.socialLinks.telegram
+        }],
+        [{
+          text: "Facebook",
+          url: appconfig.socialLinks.facebook
+        }],
+        [{
+          text: "Instagram",
+          url: appconfig.socialLinks.instagram
+        }]
+      ]),
+      resize_keyboard: true,
+      one_time_keyboard: true
+    };
+
+    this.bot.sendMessage(chatId, "Apply now!", options);
   }
 
   public async subscribe(data: IncomingMessage) {
