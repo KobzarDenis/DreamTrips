@@ -69,7 +69,7 @@ export class TelegramBot extends Bot {
         }]);
       }
 
-      options.reply_markup = JSON.stringify({ inline_keyboard });
+      options.reply_markup = JSON.stringify({ inline_keyboard, hide_keyboard: true });
 
       return options;
     }
@@ -119,20 +119,22 @@ export class TelegramBot extends Bot {
 
   async sendSocialLinks(chatId: string): Promise<any> {
     const options = {
-      reply_markup: JSON.stringify([
-        [{
-          text: "Telegram",
-          url: appconfig.socialLinks.telegram
-        }],
-        [{
-          text: "Facebook",
-          url: appconfig.socialLinks.facebook
-        }],
-        [{
-          text: "Instagram",
-          url: appconfig.socialLinks.instagram
-        }]
-      ]),
+      reply_markup: JSON.stringify({
+        inline_keyboard: [
+          [{
+            text: "Telegram",
+            url: appconfig.socialLinks.telegram
+          }],
+          [{
+            text: "Facebook",
+            url: appconfig.socialLinks.facebook
+          }],
+          [{
+            text: "Instagram",
+            url: appconfig.socialLinks.instagram
+          }]
+        ]
+      }),
       resize_keyboard: true,
       one_time_keyboard: true
     };

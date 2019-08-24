@@ -14,6 +14,8 @@ export enum StateName {
   Objections = 'objections',
   Invitation = 'invitation',
   Acception = 'acception',
+  ManualInvite = "manualInvite",
+  Finish = 'finish',
 }
 
 export abstract class State {

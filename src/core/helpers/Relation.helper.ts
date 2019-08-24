@@ -13,7 +13,9 @@ export const stateRelation = {
   [states.StateName.ChoseVariant]: states.ChoseVariantState.getInstance(),
   [states.StateName.Objections]: states.ObjectionsState.getInstance(),
   [states.StateName.Invitation]: states.InvitaionState.getInstance(),
-  [states.StateName.Acception]: states.AcceptionState.getInstance()
+  [states.StateName.Acception]: states.AcceptionState.getInstance(),
+  [states.StateName.ManualInvite]: states.ManualInviteState.getInstance(),
+  [states.StateName.Finish]: states.FinishState.getInstance(),
 };
 
 export const botRelation = {

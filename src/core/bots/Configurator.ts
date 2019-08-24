@@ -34,6 +34,7 @@ export class Configurator {
     [Buttons.I_WONT_COMING]: '/i-wont-coming',
     [Buttons.I_WONT_BE_ABLE_AT_THIS_DAY]: '/not-that-day',
     [Buttons.I_WONT_BE_ABLE_AT_THIS_TIME]: '/not-that-time',
+    [Buttons.NOT_INTERESTED]: '/not-interested',
     [Buttons.EMAIL]: '/email',
     [Buttons.PHONE_NUMBER]: '/phone-number'
   };

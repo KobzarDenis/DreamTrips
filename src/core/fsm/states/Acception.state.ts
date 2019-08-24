@@ -1,8 +1,12 @@
 import { State, StateName } from "./State";
 import { User } from "../User";
 import { IncomingMessage } from "@core/bots/Bot";
-import { Phrases, Translator } from "@core/bots/translator";
+import { Buttons, Phrases, Translator } from "@core/bots/translator";
 import { Options } from "../decorators";
+import { Configurator } from "@core/bots/Configurator";
+import { MeetingPlanModel } from "@core/models/meetingPlan.model";
+import { FinishState } from "@core/fsm/states/Finish.state";
+import { DateHelper } from "@core/helpers/Date.helper";
 
 @Options(StateName.Acception)
 export class AcceptionState extends State {
@@ -25,7 +29,23 @@ export class AcceptionState extends State {
     const message = Translator.getMessage(user.lang, Phrases.SEE_YOU, [user.name]);
     await user.bot.sendMessage(user.botId, message);
     await user.bot.sendSocialLinks(user.botId);
-    //await super.changeState(user, EntryState.getInstance());
+
+    if(data.command === Configurator.getButtonValue(Buttons.NOON)) {
+      await MeetingPlanModel.create({
+        userId: user.id,
+        date: DateHelper.getClosestEventDate(),
+        part: "noon",
+        type: data.payload[0]
+      });
+    } else {
+      await MeetingPlanModel.create({
+        userId: user.id,
+        date: DateHelper.getClosestEventDate(),
+        part: "evening",
+        type: data.payload[0]
+      });
+    }
+    await super.changeState(user, FinishState.getInstance());
   }
 
 }

@@ -5,6 +5,7 @@ import { Configurator } from "@core/bots/Configurator";
 import { Buttons, Phrases, Translator } from "@core/bots/translator";
 import { Options } from "../decorators";
 import { AcceptionState } from "@core/fsm/states/Acception.state";
+import { ObjectionsState } from "@core/fsm/states/Objections.state";
 
 @Options(StateName.Invitation)
 export class InvitaionState extends State {
@@ -28,20 +29,20 @@ export class InvitaionState extends State {
     switch (data.command) {
       case Configurator.getButtonValue(Buttons.FIRST_VARIANT):
         message = Translator.getMessage(user.lang, Phrases.ONLY_TRAVELING_MEETING);
-        await this.sendInvite(user, message);
+        await this.sendInvite(user, message, "travel");
         break;
       case Configurator.getButtonValue(Buttons.SECOND_VARIANT):
         message = Translator.getMessage(user.lang, Phrases.ONLY_BUSINESS_MEETING);
-        await this.sendInvite(user, message);
+        await this.sendInvite(user, message, "business");
         break;
       case Configurator.getButtonValue(Buttons.THIRD_VARIANT):
         message = Translator.getMessage(user.lang, Phrases.BOTH_TRAVELING_AND_BUSINESS_MEETING);
-        await this.sendInvite(user, message);
+        await this.sendInvite(user, message, "both");
         break;
       case Configurator.getButtonValue(Buttons.TOO_CONFUSING):
       case Configurator.getButtonValue(Buttons.NOT_ENOUGH_INFO):
         message = Translator.getMessage(user.lang, Phrases.ITS_NOT_A_BIG_DEAL);
-        await this.sendInvite(user, message);
+        await this.sendInvite(user, message, "both");
         break;
       default:
         await this.processAnswer(user, data);
@@ -49,16 +50,16 @@ export class InvitaionState extends State {
     }
   }
 
-  private async sendInvite(user: User, message: string) {
+  private async sendInvite(user: User, message: string, type?: string) {
     const question = Translator.getMessage(user.lang, Phrases.CLOSEST_MEETING);
     const buttons: Button[] = [
       {
         text: Translator.getButtonText(user.lang, Buttons.NOON),
-        value: Configurator.getButtonValue(Buttons.NOON)
+        value: `${Configurator.getButtonValue(Buttons.NOON)}:${type}`
       },
       {
         text: Translator.getButtonText(user.lang, Buttons.EVENING),
-        value: Configurator.getButtonValue(Buttons.EVENING)
+        value: `${Configurator.getButtonValue(Buttons.EVENING)}:${type}`
       },
       {
         text: Translator.getButtonText(user.lang, Buttons.I_WONT_COMING),
@@ -83,8 +84,8 @@ export class InvitaionState extends State {
         await user.handleAction(data);
         break;
       case Configurator.getButtonValue(Buttons.I_WONT_COMING):
-        const message = Translator.getMessage(user.lang, Phrases.WHY_YOU_WONT_TO_COME);
-        await user.bot.sendMessage(user.botId, message);
+        await super.changeState(user, ObjectionsState.getInstance());
+        await user.handleAction(data);
         break;
       default:
         await user.bot.sendMessage(user.botId, `${user.name}, choose your variant please...`);

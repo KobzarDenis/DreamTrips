@@ -10,3 +10,5 @@ export * from "./ChoseVariant.state";
 export * from "./Objections.state";
 export * from "./Invitaion.state";
 export * from "./Acception.state";
+export * from "./ManualInvite.state";
+export * from "./Finish.state";

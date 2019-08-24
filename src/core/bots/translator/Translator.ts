@@ -61,6 +61,7 @@ export enum Buttons {
   I_WONT_COMING = 'i_wont_coming',
   I_WONT_BE_ABLE_AT_THIS_DAY = 'i_wont_be_able_at_this_day',
   I_WONT_BE_ABLE_AT_THIS_TIME = 'i_wont_be_able_at_this_time',
+  NOT_INTERESTED = 'not_interested',
   EMAIL = 'email',
   PHONE_NUMBER = 'phone_number'
 }

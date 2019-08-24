@@ -6,6 +6,7 @@ import { Buttons, Phrases, Translator } from "@core/bots/translator";
 import { ChoseVariantState } from "./ChoseVariant.state";
 import { ObjectionsState } from "./Objections.state";
 import { Options } from "../decorators";
+import { InvitaionState } from "@core/fsm/states/Invitaion.state";
 
 @Options(StateName.Presentation)
 export class PresentationState extends State {
@@ -85,4 +86,5 @@ export class PresentationState extends State {
 
     await user.bot.sendMessage(user.botId, question, buttons);
   }
+
 }

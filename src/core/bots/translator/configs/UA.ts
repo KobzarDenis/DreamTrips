@@ -58,6 +58,7 @@ export const buttons = {
   i_wont_coming: 'Я не прийду',
   i_wont_be_able_at_this_day: 'Не можу у цей день',
   i_wont_be_able_at_this_time: 'Не можу у цей час',
+  not_interested: 'Не зацікавило',
   email: 'Email',
   phone_number: 'Номер телефону'
 };
