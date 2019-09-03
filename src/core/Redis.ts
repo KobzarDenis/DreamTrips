@@ -8,6 +8,7 @@ export class Redis {
   public static readonly DAY_TTL = 60 * 60 * 24;
   public static readonly WEEK_TTL = 60 * 60 * 24 * 7;
   public static readonly MONTH_TTL = 60 * 60 * 24 * 7 * 30;
+  public static readonly HALF_YEAR_TTL = 60 * 60 * 24 * 7 * 30 * 6;
 
   private constructor(url: string) {
     bluebird.promisifyAll(redis.RedisClient.prototype);
@@ -31,8 +32,8 @@ export class Redis {
     return await this.client.getAsync(key);
   }
 
-  public async setItem(key: string, value: string, expirationSec?: number) {
-    return await this.client.set(key, value, 'EX', expirationSec || Redis.DAY_TTL);
+  public async setItem(key: string, value: string, expirationSec: number = Redis.DAY_TTL) {
+    return await this.client.set(key, value, 'EX', expirationSec);
   }
 
 }

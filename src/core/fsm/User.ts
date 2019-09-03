@@ -2,6 +2,15 @@ import { State, StateName, GreetingState } from "./states";
 import { Bot } from "../bots";
 import { Langs } from "@core/bots/translator";
 import { IncomingMessage } from "@core/bots/Bot";
+import { UserModel } from "@core/models/user.model";
+
+export enum MoodState {
+  UNKNOWN = 'unknown',
+  AGREE = 'agree',
+  UNCERTAINTY = 'uncertainty',
+  BLOCK = 'block',
+  DISCARD = 'discard'
+}
 
 //ToDo: Create type file with bot types, message types
 export class User {
@@ -14,6 +23,7 @@ export class User {
   public readonly botSource: string;
   private _currentState: State;
   private _currentStateName: StateName;
+  private _moodState: MoodState;
 
   constructor(id, name, lang, bot: Bot, botSource: string, botId: string, state?: State) {
     this.id = id;
@@ -37,6 +47,10 @@ export class User {
 
     this._currentState = state;
     this._currentStateName = state.name;
+  }
+
+  public async updateMood(mood: MoodState) {
+    await UserModel.update({mood}, {where: {id: this.id}});
   }
 
   public async handleAction(data: IncomingMessage) {
@@ -66,6 +80,7 @@ export class User {
     const dto = {
       id: this.id,
       name: this.name,
+      mood: this._moodState,
       lang: this.lang,
       botSource: this.botSource,
       botId: this.botId,

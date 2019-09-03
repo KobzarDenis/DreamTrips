@@ -1,4 +1,4 @@
-import { User } from "../User";
+import { MoodState, User } from "../User";
 import { State, StateName } from "./State";
 import { Bot, Button, IncomingMessage } from "@core/bots/Bot";
 import { Configurator } from "@core/bots/Configurator";
@@ -6,6 +6,7 @@ import { Buttons, Phrases, Translator } from "@core/bots/translator";
 import { Options } from "../decorators";
 import { AcceptionState } from "@core/fsm/states/Acception.state";
 import { ObjectionsState } from "@core/fsm/states/Objections.state";
+import { Redis } from "@core/Redis";
 
 @Options(StateName.Invitation)
 export class InvitaionState extends State {
@@ -80,11 +81,12 @@ export class InvitaionState extends State {
     switch (data.command) {
       case Configurator.getButtonValue(Buttons.NOON):
       case Configurator.getButtonValue(Buttons.EVENING):
-        await super.changeState(user, AcceptionState.getInstance());
+        await super.changeState(user, AcceptionState.getInstance(), Redis.MONTH_TTL);
         await user.handleAction(data);
         break;
       case Configurator.getButtonValue(Buttons.I_WONT_COMING):
-        await super.changeState(user, ObjectionsState.getInstance());
+        await super.changeState(user, ObjectionsState.getInstance(), Redis.MONTH_TTL);
+        await user.updateMood(MoodState.BLOCK);
         await user.handleAction(data);
         break;
       default:

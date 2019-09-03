@@ -5,6 +5,7 @@ import { Configurator } from "@core/bots/Configurator";
 import { Buttons, Phrases, Translator } from "@core/bots/translator";
 import { Options } from "../decorators";
 import { InvitaionState } from "./Invitaion.state";
+import { Redis } from "@core/Redis";
 
 @Options(StateName.ChoseVariant)
 export class ChoseVariantState extends State {
@@ -41,6 +42,6 @@ export class ChoseVariantState extends State {
     ];
 
     await user.bot.sendMessage(user.botId, question, buttons);
-    super.changeState(user, InvitaionState.getInstance());
+    await super.changeState(user, InvitaionState.getInstance(), Redis.MONTH_TTL);
   }
 }

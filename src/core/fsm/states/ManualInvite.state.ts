@@ -1,10 +1,9 @@
-import { User } from "../User";
+import { MoodState, User } from "../User";
 import { State, StateName } from "./State";
 import { Button, IncomingMessage } from "@core/bots/Bot";
 import { Configurator } from "@core/bots/Configurator";
 import { Buttons, Phrases, Translator } from "@core/bots/translator";
 import { Options } from "../decorators";
-import { InvitaionState } from "./Invitaion.state";
 import { MeetingPlanModel } from "@core/models/meetingPlan.model";
 import { DateHelper } from "@core/helpers/Date.helper";
 
@@ -27,9 +26,11 @@ export class ManualInviteState extends State {
   protected async do(user: User, data: IncomingMessage): Promise<void> {
     switch (data.command) {
       case Configurator.getButtonValue(Buttons.I_WONT_BE_ABLE_AT_THIS_TIME):
+        await user.updateMood(MoodState.AGREE);
         await this.askContacts(user);
         break;
       case Configurator.getButtonValue(Buttons.I_WONT_BE_ABLE_AT_THIS_DAY):
+        await user.updateMood(MoodState.AGREE);
         await this.inviteToNextWeek(user);
         break;
       case Configurator.getButtonValue(Buttons.NOT_INTERESTED):
@@ -69,6 +70,7 @@ export class ManualInviteState extends State {
     ];
 
     await user.bot.sendMessage(user.botId, message, buttons);
+    //ToDo: Создать стейт для сбора контактов и обновлять модель юзера контактами. Помечать как для ручного приглашения на вебинар
     //await super.changeState(user, InvitaionState.getInstance());
   }
 
@@ -77,5 +79,6 @@ export class ManualInviteState extends State {
     const message = Translator.getMessage(user.lang, Phrases.HOPE_TO_SEE_YOU_NEXT_TIME, [user.name]);
     await user.bot.sendMessage(user.botId, message);
     await user.bot.sendSocialLinks(user.botId);
+    await user.updateMood(MoodState.DISCARD);
   }
 }

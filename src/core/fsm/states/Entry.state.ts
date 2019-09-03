@@ -32,10 +32,6 @@ export class EntryState extends State {
         text: Translator.getButtonText(user.lang, Buttons.ONES_PER_YEAR),
         value: Configurator.getButtonValue(Buttons.ONES_PER_YEAR)
       },
-      // {
-      //   text: Translator.getButtonText(user.lang, Buttons.THREE_TIMES_PER_YEAR),
-      //   value: Configurator.getButtonValue(Buttons.THREE_TIMES_PER_YEAR)
-      // },
       {
         text: Translator.getButtonText(user.lang, Buttons.MORE_OFTEN),
         value: Configurator.getButtonValue(Buttons.MORE_OFTEN)

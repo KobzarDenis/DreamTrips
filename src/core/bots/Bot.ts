@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import { StateBuilder, StateHolder } from "@core/fsm";
+import { StateHolder } from "@core/fsm";
 import { Command } from "@core/bots/Configurator";
 import { Logger } from "../Logger";
 
@@ -31,7 +31,7 @@ export abstract class Bot extends EventEmitter {
   public source: string;
 
   public async setup(data: IncomingMessage) {
-    await StateBuilder.setup(data.chat.firstName, data.chat.lastName, data.payload[0], data.chat.source, data.chat.id, data.payload[1]);
+    await StateHolder.setup(data.chat.firstName, data.chat.lastName, data.payload[0], data.chat.source, data.chat.id, data.payload[1]);
   }
 
   public async handleRequest(chatId: string, message: IncomingMessage) {

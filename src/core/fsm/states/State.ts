@@ -44,9 +44,9 @@ export abstract class State {
    * @param {User} user - instance of user
    * @param {State} newState - instance of state
    */
-  protected async changeState(user: User, newState: State): void {
+  protected async changeState(user: User, newState: State, ttl: number = Redis.WEEK_TTL): Promise<void> {
     user.setState(newState);
-    await Redis.getInstance().setItem(`${user.botSource}__${user.botId}`, user.pack(), Redis.WEEK_TTL);
+    await Redis.getInstance().setItem(`${user.botSource}__${user.botId}`, user.pack(), ttl);
   }
 
 }

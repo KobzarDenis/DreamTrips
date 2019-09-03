@@ -35,7 +35,7 @@ export class AttractionFirstState extends State {
       case Configurator.getButtonValue(Buttons.MORE_OFTEN):
         msg = Translator.getMessage(user.lang, Phrases.WOW);
         break;
-      case Configurator.getButtonValue(Buttons.MORE_OFTEN):
+      case Configurator.getButtonValue(Buttons.HAVE_NEVER_TRAVELING):
       default:
         msg = Translator.getMessage(user.lang, Phrases.DONT_WORRY);
         break;

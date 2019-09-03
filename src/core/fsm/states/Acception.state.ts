@@ -1,5 +1,5 @@
 import { State, StateName } from "./State";
-import { User } from "../User";
+import { MoodState, User } from "../User";
 import { IncomingMessage } from "@core/bots/Bot";
 import { Buttons, Phrases, Translator } from "@core/bots/translator";
 import { Options } from "../decorators";
@@ -7,6 +7,7 @@ import { Configurator } from "@core/bots/Configurator";
 import { MeetingPlanModel } from "@core/models/meetingPlan.model";
 import { FinishState } from "@core/fsm/states/Finish.state";
 import { DateHelper } from "@core/helpers/Date.helper";
+import { Redis } from "@core/Redis";
 
 @Options(StateName.Acception)
 export class AcceptionState extends State {
@@ -45,7 +46,9 @@ export class AcceptionState extends State {
         type: data.payload[0]
       });
     }
-    await super.changeState(user, FinishState.getInstance());
+
+    await user.updateMood(MoodState.AGREE);
+    await super.changeState(user, FinishState.getInstance(), Redis.MONTH_TTL);
   }
 
 }

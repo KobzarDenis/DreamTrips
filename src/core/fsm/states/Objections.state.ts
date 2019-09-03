@@ -6,6 +6,7 @@ import { Buttons, Phrases, Translator } from "@core/bots/translator";
 import { Options } from "../decorators";
 import { InvitaionState } from "./Invitaion.state";
 import { ManualInviteState } from "@core/fsm/states/ManualInvite.state";
+import { Redis } from "@core/Redis";
 
 @Options(StateName.Objections)
 export class ObjectionsState extends State {
@@ -51,7 +52,7 @@ export class ObjectionsState extends State {
     ];
 
     await user.bot.sendMessage(user.botId, question, buttons);
-    await super.changeState(user, InvitaionState.getInstance());
+    await super.changeState(user, InvitaionState.getInstance(), Redis.MONTH_TTL);
   }
 
   private async brokeBlock(user: User) {

@@ -57,6 +57,13 @@ export class UserModel extends Model<UserModel> {
   public botSource: string;
 
   @Column({
+    type: DataType.ENUM(["unknown", "agree", "uncertainty", "block", "discard"]),
+    allowNull: true,
+    defaultValue: "unknown"
+  })
+  public mood: string;
+
+  @Column({
     type: DataType.ENUM(["ua", "ru"]),
     allowNull: true
   })
