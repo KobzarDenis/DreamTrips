@@ -16,6 +16,7 @@ export class UserController {
     const $user = new UserModel(req.body);
     await $user.save();
 
+    return {uuid: $user.uuid};
     //Todo:Send first email; start funnel;
   }
 
