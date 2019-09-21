@@ -10,15 +10,9 @@ const userProperties = {
   firstName: {
     type: "string"
   },
-  lastName: {
-    type: "string"
-  },
   email: {
     type: "string",
     format: "email"
-  },
-  password: {
-    type: "string"
   },
   phoneNumber: {
     type: "string"
@@ -27,6 +21,17 @@ const userProperties = {
 
 export const createValidator = ajv.compile({
   type: "object",
-  required: ["firstName", "email"],
+  required: ["firstName", "phoneNumber"],
   properties: userProperties
+});
+
+export const feedbackValidator = ajv.compile({
+  type: "object",
+  required: ["firstName", "phoneNumber", "question"],
+  properties: {
+    ...userProperties,
+    question: {
+      type: "string"
+    }
+  }
 });
