@@ -6,6 +6,7 @@ import { Buttons, Phrases, Translator } from "@core/bots/translator";
 import { Options } from "../decorators";
 import { MeetingPlanModel } from "@core/models/meetingPlan.model";
 import { DateHelper } from "@core/helpers/Date.helper";
+import {ContactCollectionState} from "@core/fsm/states/ContactCollection.state";
 
 @Options(StateName.ManualInvite)
 export class ManualInviteState extends State {
@@ -70,8 +71,7 @@ export class ManualInviteState extends State {
     ];
 
     await user.bot.sendMessage(user.botId, message, buttons);
-    //ToDo: Создать стейт для сбора контактов и обновлять модель юзера контактами. Помечать как для ручного приглашения на вебинар
-    //await super.changeState(user, InvitaionState.getInstance());
+    await super.changeState(user, ContactCollectionState.getInstance());
   }
 
 
@@ -83,6 +83,6 @@ export class ManualInviteState extends State {
   }
 
   protected async reply(user: User, data: IncomingMessage): Promise<void> {
-    await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
+    await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`);
   }
 }

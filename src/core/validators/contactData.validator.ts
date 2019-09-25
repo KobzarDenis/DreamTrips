@@ -28,7 +28,7 @@ const emailValidator = ajv.compile({
 
 validator.errors = null;
 export function validator(data: any, contactType: string) {
-    if(contactType === "phoneNumber") {
+    if(contactType === "phone-number") {
         if(!phoneValidator(data)) {
             validator.errors = phoneValidator.errors;
             return false;

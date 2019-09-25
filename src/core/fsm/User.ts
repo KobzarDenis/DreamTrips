@@ -5,6 +5,7 @@ import {IncomingMessage} from "@core/bots/Bot";
 import {UserModel} from "@core/models/user.model";
 import {validator} from "@core/validators";
 import {ValidationError} from "@core/errors";
+import { Logger } from "@core/Logger";
 
 export enum MoodState {
     UNKNOWN = 'unknown',
@@ -15,7 +16,7 @@ export enum MoodState {
 }
 
 export enum ContactType {
-    PhoneNumber = 'phoneNumber',
+    PhoneNumber = 'phone-number',
     Email = 'email'
 }
 
@@ -83,7 +84,7 @@ export class User {
         try {
             await this._currentState.handleAction(this, data);
         } catch (e) {
-            console.log(`ERROR [handleAction]: ${e.message}`);
+            Logger.getInstance().error(`[handleAction]: ${e.message}`);
         }
     }
 
@@ -91,7 +92,7 @@ export class User {
         try {
             await this._currentState.processText(this, data);
         } catch (e) {
-            console.log(`ERROR [processText]: ${e.message}`);
+            Logger.getInstance().error(`[processText]: ${e.message}`);
         }
     }
 
@@ -103,7 +104,7 @@ export class User {
         try {
             await this.bot.sendMessage(this.botId, message);
         } catch (e) {
-            console.log(`ERROR [sendMessage]: ${e.message}`);
+            Logger.getInstance().error(`[sendMessage]: ${e.message}`);
         }
     }
 

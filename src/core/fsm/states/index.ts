@@ -12,3 +12,4 @@ export * from "./Invitaion.state";
 export * from "./Acception.state";
 export * from "./ManualInvite.state";
 export * from "./Finish.state";
+export * from "./ContactCollection.state";

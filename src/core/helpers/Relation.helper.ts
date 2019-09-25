@@ -16,6 +16,7 @@ export const stateRelation = {
   [states.StateName.Acception]: states.AcceptionState.getInstance(),
   [states.StateName.ManualInvite]: states.ManualInviteState.getInstance(),
   [states.StateName.Finish]: states.FinishState.getInstance(),
+  [states.StateName.ContactCollection]: states.ContactCollectionState.getInstance()
 };
 
 export const botRelation = {
