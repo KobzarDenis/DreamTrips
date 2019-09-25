@@ -9,7 +9,8 @@ export type IncomingMessage = {
   payload: any,
   chatId?: string,
   chat?: any,
-  userId: string
+  userId: string,
+  original: string
 };
 
 export enum BotName {
@@ -42,10 +43,10 @@ export abstract class Bot extends EventEmitter {
 
   private async processText(chatId: string, message: IncomingMessage) {
     const user = await StateHolder.getUser(`${this.source}__${chatId}`);
-    Logger.getInstance().info(`NEW TEXT [${message.chat.source}] { chatId: ${message.chat.id}, name: ${user.name}, text: ${message.command}}`);
+    Logger.getInstance().info(`NEW TEXT [${message.chat.source}] { chatId: ${message.chat.id}, name: ${user.name}, text: ${message.original}}`);
   }
 
-  private checkCommand(command: string): boolean {
+  protected checkCommand(command: string): boolean {
     if(!this.eventNames().find((n => n === command))) {
       return false;
     }

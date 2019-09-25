@@ -90,12 +90,14 @@ export class TelegramBot extends Bot {
   }
 
   protected parseMessage(msg: any): IncomingMessage {
-    const parsed = msg.text ? msg.text.split(':') : msg.data.split(':');
+    const original = msg.text ? msg.text.trim() : msg.data.trim();
+    const parsed = original.split(':');
     const commandAndId = parsed[0].split(' ');
 
     const chat = msg.chat || msg.message.chat;
 
     let message: IncomingMessage = {
+      original,
       chat: {
         id: chat.id,
         source: this.source,

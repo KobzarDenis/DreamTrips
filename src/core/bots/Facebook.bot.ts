@@ -61,10 +61,12 @@ export class FacebookBot extends Bot {
   }
 
   protected parseMessage(msg): IncomingMessage {
-    const parsed = msg.data.split(':');
+    const original = msg.data;
+    const parsed = original.split(':');
     const commandAndId = parsed[0].split(' ');
 
     const message: IncomingMessage = {
+      original,
       chat: {
         id: msg.senderId,
         source: this.source,
