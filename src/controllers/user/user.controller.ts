@@ -2,13 +2,13 @@ import { Request } from "express";
 import { UserModel } from "@core/models/user.model";
 import { createValidator, feedbackValidator } from "./user.validator";
 import {Logger} from "@core/Logger";
+import {ValidationError} from "@core/errors";
 
 export class UserController {
 
   public static async registration(req: Request) {
     if (!createValidator(req.body)) {
-      const errorMsg = createValidator.errors.map(er => er.message).join(" ;");
-      throw new Error(errorMsg);
+      throw new ValidationError(createValidator.errors);
     }
 
     Logger.getInstance().info(`New signUp: ${req.body.firstName} | ${req.body.phoneNumber}`);
@@ -22,8 +22,7 @@ export class UserController {
 
   public static async feedback(req: Request) {
     if (!feedbackValidator(req.body)) {
-      const errorMsg = feedbackValidator.errors.map(er => er.message).join(" ;");
-      throw new Error(errorMsg);
+      throw new ValidationError(feedbackValidator.errors);
     }
 
     Logger.getInstance().info(`New question: ${req.body.question}`);
