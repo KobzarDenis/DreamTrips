@@ -40,10 +40,27 @@ export abstract class Bot extends EventEmitter {
     await user.handleAction(message);
   }
 
+  private async processText(chatId: string, message: IncomingMessage) {
+    const user = await StateHolder.getUser(`${this.source}__${chatId}`);
+    Logger.getInstance().info(`NEW TEXT [${message.chat.source}] { chatId: ${message.chat.id}, name: ${user.name}, text: ${message.command}}`);
+  }
+
+  private checkCommand(command: string): boolean {
+    if(!this.eventNames().find((n => n === command))) {
+      return false;
+    }
+    return true;
+  }
+
   protected async onMessage(message: IncomingMessage) {
     Logger.getInstance().info(`[${message.chat.source}] Bot new message [chatId: ${message.chat.id}; name: ${message.chat.firstName} ${message.chat.lastName}]`);
     Logger.getInstance().info(`[${message.chat.source}] Bot new message [command: ${message.command}; payload: ${JSON.stringify(message.payload)}]`);
-    this.emit(message.command, message);
+
+    if(this.checkCommand(message.command)) {
+      this.emit(message.command, message);
+    } else {
+      this.processText(message.chat.id, message);
+    }
   }
 
   protected async onCallBack(message: IncomingMessage) {

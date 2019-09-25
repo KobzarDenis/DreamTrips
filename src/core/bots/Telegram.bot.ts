@@ -2,6 +2,7 @@ import * as TelegramAPI from "node-telegram-bot-api";
 import { Bot, IncomingMessage, Button, BotName } from "@core/bots/Bot";
 import { Command } from "@core/bots/Configurator";
 import * as appconfig from "../../../appconfig";
+import {Logger} from "@core/Logger";
 
 export class TelegramBot extends Bot {
 
@@ -156,6 +157,8 @@ export class TelegramBot extends Bot {
         ]
       })
     };
+
+    Logger.getInstance().info(`NEW USER WAS STARTED [${data.userId}]`);
 
     this.bot.sendMessage(data.chat.id, message, options);
   }
