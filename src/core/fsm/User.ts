@@ -87,6 +87,14 @@ export class User {
         }
     }
 
+    public async processText(data: IncomingMessage) {
+        try {
+            await this._currentState.processText(this, data);
+        } catch (e) {
+            console.log(`ERROR [processText]: ${e.message}`);
+        }
+    }
+
     /**
      * Send message to user's messenger
      * @param {string} message - text message

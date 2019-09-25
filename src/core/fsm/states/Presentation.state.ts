@@ -88,4 +88,8 @@ export class PresentationState extends State {
     await user.bot.sendMessage(user.botId, question, buttons);
   }
 
+  protected async reply(user: User, data: IncomingMessage): Promise<void> {
+    await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
+  }
+
 }

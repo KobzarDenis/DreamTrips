@@ -57,4 +57,8 @@ export class IntroState extends State {
       }, Bot.MID_PAUSE_MS);
     }, Bot.SHORT_PAUSE_MS);
   }
+
+  protected async reply(user: User, data: IncomingMessage): Promise<void> {
+    await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
+  }
 }

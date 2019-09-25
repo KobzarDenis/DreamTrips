@@ -26,4 +26,8 @@ export class FinishState extends State {
     await user.bot.sendMessage(user.botId, message);
   }
 
+  protected async reply(user: User, data: IncomingMessage): Promise<void> {
+    await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
+  }
+
 }

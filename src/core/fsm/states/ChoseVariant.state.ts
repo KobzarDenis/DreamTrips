@@ -44,4 +44,8 @@ export class ChoseVariantState extends State {
     await user.bot.sendMessage(user.botId, question, buttons);
     await super.changeState(user, InvitaionState.getInstance(), Redis.MONTH_TTL);
   }
+
+  protected async reply(user: User, data: IncomingMessage): Promise<void> {
+    await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
+  }
 }

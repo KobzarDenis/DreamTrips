@@ -77,4 +77,8 @@ export class ObjectionsState extends State {
     await super.changeState(user, ManualInviteState.getInstance());
   }
 
+  protected async reply(user: User, data: IncomingMessage): Promise<void> {
+    await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
+  }
+
 }

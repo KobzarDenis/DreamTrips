@@ -51,4 +51,8 @@ export class AcceptionState extends State {
     await super.changeState(user, FinishState.getInstance(), Redis.MONTH_TTL);
   }
 
+  protected async reply(user: User, data: IncomingMessage): Promise<void> {
+    await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
+  }
+
 }

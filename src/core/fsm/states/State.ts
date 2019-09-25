@@ -33,14 +33,31 @@ export abstract class State {
   }
 
   /**
+   * Process user's text message in current state context
+   * @param {User} user - instance of user
+   */
+  public async processText(user: User, data: IncomingMessage): Promise<void> {
+    await this.reply(user, data);
+  }
+
+  /**
+   * Reply for user's text message in current state context
+   * @param {User} user - instance of user
+   * @param {IncomingMessage} data - incoming message
+   * @return {Promise<void>}
+   */
+  protected async abstract reply(user: User, data: IncomingMessage): Promise<void>;
+
+  /**
    * Do action on current state
    * @param {User} user - instance of user
+   * @param {IncomingMessage} data - incoming message
    * @return {Promise<void>}
    */
   protected async abstract do(user: User, data: IncomingMessage): Promise<void>;
 
   /**
-   * Change user's state after action
+   * Change user's state in Redis after the action
    * @param {User} user - instance of user
    * @param {State} newState - instance of state
    */

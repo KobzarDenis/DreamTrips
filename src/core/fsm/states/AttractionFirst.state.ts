@@ -62,4 +62,8 @@ export class AttractionFirstState extends State {
       await super.changeState(user, AttractionSecondState.getInstance());
     }, Bot.SHORT_PAUSE_MS);
   }
+
+  protected async reply(user: User, data: IncomingMessage): Promise<void> {
+    await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
+  }
 }

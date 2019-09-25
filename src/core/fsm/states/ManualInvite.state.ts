@@ -81,4 +81,8 @@ export class ManualInviteState extends State {
     await user.bot.sendSocialLinks(user.botId);
     await user.updateMood(MoodState.DISCARD);
   }
+
+  protected async reply(user: User, data: IncomingMessage): Promise<void> {
+    await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
+  }
 }
