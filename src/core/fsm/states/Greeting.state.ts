@@ -24,7 +24,7 @@ export class GreetingState extends State {
     return GreetingState._instance;
   }
 
-  protected async do(user: User, data: IncomingMessage): Promise<void> {
+  protected async do(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     const message = Translator.getMessage(user.lang, Phrases.GREETING, [user.name]);
     const button: Button = {
       text: Translator.getButtonText(user.lang, Buttons.GOGOGO),
@@ -35,7 +35,7 @@ export class GreetingState extends State {
     await super.changeState(user, EntryState.getInstance());
   }
 
-  protected async reply(user: User, data: IncomingMessage): Promise<void> {
+  protected async reply(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
   }
 

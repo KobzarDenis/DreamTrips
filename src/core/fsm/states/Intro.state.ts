@@ -22,7 +22,7 @@ export class IntroState extends State {
     return IntroState._instance;
   }
 
-  protected async do(user: User, data: IncomingMessage): Promise<void> {
+  protected async do(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     const prepare = Translator.getMessage(user.lang, Phrases.PREPARE_FOR_MAGIC);
     const opening = Translator.getMessage(user.lang, Phrases.OPENING);
     const video = Translator.getMessage(user.lang, Phrases.VIDEO);
@@ -58,7 +58,7 @@ export class IntroState extends State {
     }, Bot.SHORT_PAUSE_MS);
   }
 
-  protected async reply(user: User, data: IncomingMessage): Promise<void> {
+  protected async reply(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
   }
 }

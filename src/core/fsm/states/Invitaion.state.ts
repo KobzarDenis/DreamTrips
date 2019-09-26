@@ -25,7 +25,7 @@ export class InvitaionState extends State {
   }
 
   //ToDo: Create next state!!!
-  protected async do(user: User, data: IncomingMessage): Promise<void> {
+  protected async do(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     let message: string;
     switch (data.command) {
       case Configurator.getButtonValue(Buttons.FIRST_VARIANT):
@@ -95,7 +95,7 @@ export class InvitaionState extends State {
     }
   }
 
-  protected async reply(user: User, data: IncomingMessage): Promise<void> {
+  protected async reply(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
   }
 

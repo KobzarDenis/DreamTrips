@@ -23,7 +23,7 @@ export class ChoseVariantState extends State {
     return ChoseVariantState._instance;
   }
 
-  protected async do(user: User, data: IncomingMessage): Promise<void> {
+  protected async do(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     const question = Translator.getMessage(user.lang, Phrases.CHOOSE_YOUR_BEST, [user.name]);
 
     const buttons: Button[] = [
@@ -45,7 +45,7 @@ export class ChoseVariantState extends State {
     await super.changeState(user, InvitaionState.getInstance(), Redis.MONTH_TTL);
   }
 
-  protected async reply(user: User, data: IncomingMessage): Promise<void> {
+  protected async reply(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
   }
 }

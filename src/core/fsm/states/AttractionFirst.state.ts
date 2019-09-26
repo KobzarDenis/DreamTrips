@@ -22,7 +22,7 @@ export class AttractionFirstState extends State {
     return AttractionFirstState._instance;
   }
 
-  protected async do(user: User, data: IncomingMessage): Promise<void> {
+  protected async do(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     let msg: string;
 
     switch (data.command) {
@@ -63,7 +63,7 @@ export class AttractionFirstState extends State {
     }, Bot.SHORT_PAUSE_MS);
   }
 
-  protected async reply(user: User, data: IncomingMessage): Promise<void> {
+  protected async reply(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
   }
 }

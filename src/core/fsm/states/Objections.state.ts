@@ -24,7 +24,7 @@ export class ObjectionsState extends State {
     return ObjectionsState._instance;
   }
 
-  protected async do(user: User, data: IncomingMessage): Promise<void> {
+  protected async do(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     switch (data.command) {
       case Configurator.getButtonValue(Buttons.IM_NOT_SURE):
         await this.brokeUncertainty(user);
@@ -77,7 +77,7 @@ export class ObjectionsState extends State {
     await super.changeState(user, ManualInviteState.getInstance());
   }
 
-  protected async reply(user: User, data: IncomingMessage): Promise<void> {
+  protected async reply(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
   }
 

@@ -20,13 +20,13 @@ export class FinishState extends State {
     return FinishState._instance;
   }
 
-  protected async do(user: User, data: IncomingMessage): Promise<void> {
+  protected async do(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     //const message = Translator.getMessage(user.lang, Phrases.GREETING, [user.name]);
     const message = `${user.name}, мы получили Ваше сообщение и в скором времени мы на него ответим.\n Если у Вас есть дополнительные вопросы, выберите варианты из нижепредложенных: `
     await user.bot.sendMessage(user.botId, message);
   }
 
-  protected async reply(user: User, data: IncomingMessage): Promise<void> {
+  protected async reply(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
   }
 

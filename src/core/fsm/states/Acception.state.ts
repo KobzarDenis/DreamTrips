@@ -26,7 +26,7 @@ export class AcceptionState extends State {
     return AcceptionState._instance;
   }
 
-  protected async do(user: User, data: IncomingMessage): Promise<void> {
+  protected async do(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     const message = Translator.getMessage(user.lang, Phrases.SEE_YOU, [user.name]);
     await user.bot.sendMessage(user.botId, message);
     await user.bot.sendSocialLinks(user.botId);
@@ -51,7 +51,7 @@ export class AcceptionState extends State {
     await super.changeState(user, FinishState.getInstance(), Redis.MONTH_TTL);
   }
 
-  protected async reply(user: User, data: IncomingMessage): Promise<void> {
+  protected async reply(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
   }
 

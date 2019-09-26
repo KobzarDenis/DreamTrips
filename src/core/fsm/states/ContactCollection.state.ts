@@ -1,5 +1,5 @@
 import { State, StateName } from "./State";
-import { User } from "../User";
+import {MoodState, User} from "../User";
 import { IncomingMessage } from "@core/bots/Bot";
 import { EntryState } from "./Entry.state";
 import { Button } from "@core/bots/Bot";
@@ -24,19 +24,28 @@ export class ContactCollectionState extends State {
         return ContactCollectionState._instance;
     }
 
-    protected async do(user: User, data: IncomingMessage): Promise<void> {
-        const message = Translator.getMessage(user.lang, Phrases.GREETING, [user.name]);
-        const button: Button = {
-            text: Translator.getButtonText(user.lang, Buttons.GOGOGO),
-            value: Configurator.getButtonValue(Buttons.GOGOGO)
-        };
+    protected async do(user: User, data: IncomingMessage, additional?: any): Promise<void> {
+        let additionalInfo;
+        switch (data.command) {
+            case Configurator.getButtonValue(Buttons.EMAIL):
+                additionalInfo.contactType = Configurator.getButtonValue(Buttons.EMAIL);
+                await user.updateMood(MoodState.AGREE);
+                break;
+            case Configurator.getButtonValue(Buttons.PHONE_NUMBER):
+                additionalInfo.contactType = Configurator.getButtonValue(Buttons.PHONE_NUMBER);
+                await user.updateMood(MoodState.AGREE);
+                break;
+            default:
+                additionalInfo = null;
+                break;
+        }
 
-        await user.bot.sendMessage(user.botId, message, button);
-        await super.changeState(user, EntryState.getInstance());
+        await user.bot.sendMessage(user.botId, `Please type your contact bellow...`);
+        await super.changeState(user, this, additionalInfo);
     }
 
-    protected async reply(user: User, data: IncomingMessage): Promise<void> {
-        await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
+    protected async reply(user: User, data: IncomingMessage, additional?: any): Promise<void> {
+        await user.bot.sendMessage(user.botId, `This is your ${additional.contactType}  [${data.original}].`);
     }
 
 }

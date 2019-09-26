@@ -80,17 +80,17 @@ export class User {
         await UserModel.update({...contactInfo}, {where: {id: this.id}});
     }
 
-    public async handleAction(data: IncomingMessage) {
+    public async handleAction(data: IncomingMessage, additional?: any) {
         try {
-            await this._currentState.handleAction(this, data);
+            await this._currentState.handleAction(this, data, additional);
         } catch (e) {
             Logger.getInstance().error(`[handleAction]: ${e.message}`);
         }
     }
 
-    public async processText(data: IncomingMessage) {
+    public async processText(data: IncomingMessage, additional?: any) {
         try {
-            await this._currentState.processText(this, data);
+            await this._currentState.processText(this, data, additional);
         } catch (e) {
             Logger.getInstance().error(`[processText]: ${e.message}`);
         }
@@ -111,7 +111,7 @@ export class User {
     /**
      * Pack user's data for set in to temp DB
      */
-    public pack(): string {
+    public pack(additional: any): string {
         const dto = {
             id: this.id,
             name: this.name,
@@ -119,7 +119,8 @@ export class User {
             lang: this.lang,
             botSource: this.botSource,
             botId: this.botId,
-            currentStateName: this._currentStateName
+            currentStateName: this._currentStateName,
+            additional
         };
 
         return JSON.stringify(dto);

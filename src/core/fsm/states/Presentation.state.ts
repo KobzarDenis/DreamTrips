@@ -25,7 +25,7 @@ export class PresentationState extends State {
   }
 
   //ToDo: Create next state!!!
-  protected async do(user: User, data: IncomingMessage): Promise<void> {
+  protected async do(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     switch (data.command) {
       case Configurator.getButtonValue(Buttons.YES_I_HAVE_A_QUESTION):
         await this.sendForUnknowing(user);
@@ -88,7 +88,7 @@ export class PresentationState extends State {
     await user.bot.sendMessage(user.botId, question, buttons);
   }
 
-  protected async reply(user: User, data: IncomingMessage): Promise<void> {
+  protected async reply(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
   }
 

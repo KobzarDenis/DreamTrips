@@ -36,17 +36,17 @@ export abstract class Bot extends EventEmitter {
   }
 
   public async handleRequest(chatId: string, message: IncomingMessage) {
-    const user = await StateHolder.getUser(`${this.source}__${chatId}`);
+    const userMeta = await StateHolder.getUserAndMeta(`${this.source}__${chatId}`);
     Logger.getInstance().info(`NEW EVENT [${message.chat.source}] { action: ${message.command}, chatId: ${message.chat.id}, name: ${user.name}}`);
 
-    await user.handleAction(message);
+    await userMeta.user.handleAction(message, userMeta.additional);
   }
 
   private async processText(chatId: string, message: IncomingMessage) {
-    const user = await StateHolder.getUser(`${this.source}__${chatId}`);
+    const userMeta = await StateHolder.getUserAndMeta(`${this.source}__${chatId}`);
     Logger.getInstance().info(`NEW TEXT [${message.chat.source}] { chatId: ${message.chat.id}, name: ${user.name}, text: ${message.original}}`);
 
-    await user.processText(message);
+    await userMeta.user.processText(message, userMeta.additional);
   }
 
   protected checkCommand(command: string): boolean {

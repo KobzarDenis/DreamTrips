@@ -23,7 +23,7 @@ export class EntryState extends State {
     return EntryState._instance;
   }
 
-  protected async do(user: User, data: IncomingMessage): Promise<void> {
+  protected async do(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     const msg = Translator.getMessage(user.lang, Phrases.INTRO);
     const question = Translator.getMessage(user.lang, Phrases.HOW_OFTEN_DO_YOU_TRAVEL);
 
@@ -51,7 +51,7 @@ export class EntryState extends State {
     }, Bot.MID_PAUSE_MS);
   }
 
-  protected async reply(user: User, data: IncomingMessage): Promise<void> {
+  protected async reply(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
   }
 

@@ -22,7 +22,7 @@ export class AttractionSecondState extends State {
     return AttractionSecondState._instance;
   }
 
-  protected async do(user: User, data: IncomingMessage): Promise<void> {
+  protected async do(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     const question = Translator.getMessage(user.lang, Phrases.DO_YOU_WANNA_TRAVELING_IMPRESSIVE);
 
     const buttons: Button = {
@@ -34,7 +34,7 @@ export class AttractionSecondState extends State {
     await super.changeState(user, IntroState.getInstance());
   }
 
-  protected async reply(user: User, data: IncomingMessage): Promise<void> {
+  protected async reply(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
   }
 }

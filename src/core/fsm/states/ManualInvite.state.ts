@@ -24,7 +24,7 @@ export class ManualInviteState extends State {
     return ManualInviteState._instance;
   }
 
-  protected async do(user: User, data: IncomingMessage): Promise<void> {
+  protected async do(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     switch (data.command) {
       case Configurator.getButtonValue(Buttons.I_WONT_BE_ABLE_AT_THIS_TIME):
         await user.updateMood(MoodState.AGREE);
@@ -82,7 +82,7 @@ export class ManualInviteState extends State {
     await user.updateMood(MoodState.DISCARD);
   }
 
-  protected async reply(user: User, data: IncomingMessage): Promise<void> {
+  protected async reply(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`);
   }
 }
