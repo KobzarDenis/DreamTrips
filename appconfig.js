@@ -26,6 +26,9 @@ module.exports = {
         facebook: {
             verifyToken: process.env.FACEBOOK_VERIFY_TOKEN || 'tVchDbGwSKHM8VF', // My own token
             token: process.env.FACEBOOK_TOKEN || 'EAAM4dKJ0lCcBAKPqdIYo4MUwHYub0N9g3SZB9rB06T5iO4Yr8jUHxrOnn0oLCx4kS6qVWA2juAe9b2eezCP0AQmfyfubATc78l8tpuEjaLZAZAn2Xt1KPa1VC8iZBDGC6qOw7Be4okKh42daJSJ3PeF0AdNmimZBOmTNJkMpRFQZDZD'
+        },
+        system: {
+            token: process.env.SYSTEM_BOT_TOKEN || "885095720:AAF9yfMzw2rR9ZzAZ3d1JZsUg4yGyKiffiE"
         }
     },
     socialLinks: {

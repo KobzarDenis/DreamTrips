@@ -61,7 +61,7 @@ export class User {
         await UserModel.update({mood}, {where: {id: this.id}});
     }
 
-    public async updateContacts(contactData: string, type: ContactType) {
+    public async updateContacts(contactData: string, type: ContactType): boolean {
         let contactInfo;
         if (type === ContactType.PhoneNumber) {
             contactInfo = {
@@ -73,11 +73,17 @@ export class User {
             };
         }
 
-        if(!validator(contactInfo, type)) {
-          throw new ValidationError(validator["errors"]);
-        }
+        try {
+            if(!validator(contactInfo, type)) {
+                throw new ValidationError(validator["errors"]);
+            }
 
-        await UserModel.update({...contactInfo}, {where: {id: this.id}});
+            await UserModel.update({...contactInfo}, {where: {id: this.id}});
+            return true;
+        } catch (e) {
+            Logger.getInstance().error(`[UPDATE USER CONTACTS] ${e.message}`);
+            return false;
+        }
     }
 
     public async handleAction(data: IncomingMessage, additional?: any) {

@@ -7,6 +7,7 @@ import { Buttons, Phrases, Translator } from "@core/bots/translator";
 import { Configurator } from "@core/bots/Configurator";
 import { Options } from "../decorators";
 import {Redis} from "@core/Redis";
+import {ManualInviteModel} from "@core/models/manualInvite.model";
 
 @Options(StateName.ContactCollection)
 export class ContactCollectionState extends State {
@@ -26,27 +27,22 @@ export class ContactCollectionState extends State {
     }
 
     protected async do(user: User, data: IncomingMessage, additional?: any): Promise<void> {
-        let additionalInfo;
-        switch (data.command) {
-            case Configurator.getButtonValue(Buttons.EMAIL):
-                additionalInfo = {contactType: Configurator.getButtonValue(Buttons.EMAIL)};
-                await user.updateMood(MoodState.AGREE);
-                break;
-            case Configurator.getButtonValue(Buttons.PHONE_NUMBER):
-                additionalInfo = {contactType: Configurator.getButtonValue(Buttons.PHONE_NUMBER)};
-                await user.updateMood(MoodState.AGREE);
-                break;
-            default:
-                additionalInfo = null;
-                break;
-        }
+        let additionalInfo = {contactType: data.command.substring(1)};
 
         await user.bot.sendMessage(user.botId, `Please type your contact bellow...`);
         await super.changeState(user, this, Redis.WEEK_TTL, additionalInfo);
     }
 
     protected async reply(user: User, data: IncomingMessage, additional?: any): Promise<void> {
-        await user.bot.sendMessage(user.botId, `This is your ${additional.contactType}  [${data.original}].`);
+        const isUpdated = await user.updateContacts(data.original, additional.contactType);
+
+        if(isUpdated) {
+            await ManualInviteModel.create({userId: user.id, date: new Date()});
+            await user.bot.sendMessage(user.botId, `Спасибо, мы свяжемся с тобой в ближайшее время =)\nА пока предлагаем подписаться на наши страницы в соц. сетях !`);
+            await user.bot.sendSocialLinks(user.botId);
+        } else {
+            await user.bot.sendMessage(user.botId, `Ошибка при обновлении данных.`);
+        }
     }
 
 }

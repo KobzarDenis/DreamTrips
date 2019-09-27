@@ -3,11 +3,13 @@ import {
   CreatedAt,
   DataType,
   DefaultScope,
-  ForeignKey,
+  ForeignKey, HasMany,
   Model,
   Table,
   UpdatedAt
 } from "sequelize-typescript";
+import {ManualInviteModel} from "./manualInvite.model"
+import {MeetingPlanModel} from "./meetingPlan.model"
 import * as sequelize from "sequelize";
 
 @DefaultScope({
@@ -88,5 +90,11 @@ export class UserModel extends Model<UserModel> {
 
   @UpdatedAt
   public updatedAt: Date;
+
+  @HasMany(() => MeetingPlanModel)
+  public meetings: MeetingPlanModel[]
+
+  @HasMany(() => ManualInviteModel)
+  public manualInvites: ManualInviteModel[]
 
 }
