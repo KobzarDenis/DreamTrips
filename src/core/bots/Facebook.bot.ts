@@ -111,6 +111,10 @@ export class FacebookBot extends Bot {
     await this.bot.sendButtonsMessage(chatId, "Apply now!", buttons);
   }
 
+  async sendVideo(chatId: string, key: string): Promise<any> {
+    await this.bot.sendVideoMessage(chatId, "https://dreamtrips-team.s3.eu-central-1.amazonaws.com/video/dreamtrips.mp4");
+  }
+
   public async subscribe(data: IncomingMessage) {
     await this.bot.sendTextMessage(data.chat.id, `${data.chat.id}, Вы можете поднять дохуя бабла.`);
   }

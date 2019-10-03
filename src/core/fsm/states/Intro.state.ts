@@ -26,7 +26,6 @@ export class IntroState extends State {
     const prepare = Translator.getMessage(user.lang, Phrases.PREPARE_FOR_MAGIC);
     const opening = Translator.getMessage(user.lang, Phrases.OPENING);
     const video = Translator.getMessage(user.lang, Phrases.VIDEO);
-    const link = `https://www.youtube.com/watch?v=NGAEB4N0Evs`;
     const question = Translator.getMessage(user.lang, Phrases.INSPIRED_OR_NOT);
 
     const buttons: Button = {
@@ -46,7 +45,7 @@ export class IntroState extends State {
         await user.bot.typingOn(user.botId);
         setTimeout(async () => {
           await user.bot.typingOff(user.botId);
-          await user.bot.sendMessage(user.botId, link);
+          await user.bot.sendVideo(user.botId, "video/dreamtrips.mp4");
           await user.bot.typingOn(user.botId);
           setTimeout(async () => {
             await user.bot.typingOff(user.botId);

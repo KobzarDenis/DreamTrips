@@ -9,6 +9,7 @@ import { TelegramBot, FacebookBot, SystemBot, BotName } from "@core/bots";
 import { ExpressServer } from "@core/servers"
 import * as path from "path";
 import { StateHolder } from "@core/fsm";
+import {FileManager} from "@core/fileManager";
 
 sm.install();
 
@@ -19,6 +20,8 @@ sm.install();
 
     const es = new ExpressServer(appconfig, path.join(__dirname, './controllers'));
     es.start();
+
+    FileManager.init(appconfig.awsCredentials);
 
     FacebookBot.getInstance(appconfig.bot.facebook.token, es).init();
     TelegramBot.getInstance(appconfig.bot.telegram.token).init();

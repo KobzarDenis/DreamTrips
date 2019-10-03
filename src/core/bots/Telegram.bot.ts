@@ -3,6 +3,7 @@ import { Bot, IncomingMessage, Button, BotName } from "@core/bots/Bot";
 import { Command } from "@core/bots/Configurator";
 import * as appconfig from "../../../appconfig";
 import {Logger} from "@core/Logger";
+import {FileManager} from "@core/fileManager";
 
 export class TelegramBot extends Bot {
 
@@ -143,6 +144,11 @@ export class TelegramBot extends Bot {
     };
 
     this.bot.sendMessage(chatId, "Apply now!", options);
+  }
+
+  async sendVideo(chatId: string, key: string): Promise<any> {
+    const video = await FileManager.getFile(key);
+    this.bot.sendVideo(chatId, video);
   }
 
   public async subscribe(data: IncomingMessage) {

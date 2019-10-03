@@ -28,6 +28,7 @@ export abstract class Bot extends EventEmitter {
   public static readonly SHORT_PAUSE_MS = 800;
   public static readonly MID_PAUSE_MS = 1500;
   public static readonly LONG_PAUSE_MS = 3000;
+  public static readonly VIDEO_PAUSE = 3000;
 
   public source: string;
 
@@ -80,6 +81,7 @@ export abstract class Bot extends EventEmitter {
   public abstract async typingOn(chatId: string);
   public abstract async typingOff(chatId: string);
   public abstract async sendSocialLinks(chatId: string);
+  public abstract async sendVideo(chatId: string, key: string);
 
   protected abstract buttonsBuilder(template: Button | Button[]);
 

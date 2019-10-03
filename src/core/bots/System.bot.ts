@@ -1,10 +1,10 @@
 import * as TelegramAPI from "node-telegram-bot-api";
 import {Button, IncomingMessage} from "@core/bots/Bot";
-import {Command} from "@core/bots/Configurator";
+import { Command } from "@core/bots/Configurator";
 import { EventEmitter } from "events";
 
 //ToDo: finish it
-export class SystemBot extends EventEmitter{
+export class SystemBot extends EventEmitter {
     private bot: TelegramAPI;
     public static _instance: SystemBot;
 
