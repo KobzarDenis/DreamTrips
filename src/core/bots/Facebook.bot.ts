@@ -152,7 +152,7 @@ export class FacebookBot extends Bot {
   }
 
   private createHandler(server: ExpressServer) {
-    server.createAdditionalHandlers("get", '/api/webhook', (req, res) => {
+    server.createAdditionalHandlers("get", '/webhook/fb', (req, res) => {
       let mode = req.query['hub.mode'];
       let token = req.query['hub.verify_token'];
       let challenge = req.query['hub.challenge'];
