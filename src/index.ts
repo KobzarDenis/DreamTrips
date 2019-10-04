@@ -10,6 +10,7 @@ import { ExpressServer } from "@core/servers"
 import * as path from "path";
 import { StateHolder } from "@core/fsm";
 import {FileManager} from "@core/fileManager";
+import {Scheduler} from "@core/scheduler";
 
 sm.install();
 
@@ -22,6 +23,7 @@ sm.install();
     es.start();
 
     FileManager.init(appconfig.awsCredentials);
+    Scheduler.getInstance().init();
 
     FacebookBot.getInstance(appconfig.bot.facebook.token, es).init();
     TelegramBot.getInstance(appconfig.bot.telegram.token).init();
