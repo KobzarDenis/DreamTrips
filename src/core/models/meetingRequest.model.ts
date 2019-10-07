@@ -68,7 +68,4 @@ export class MeetingRequestModel extends Model<MeetingRequestModel> {
   @BelongsTo(() => UserModel)
   public user: UserModel;
 
-  @HasMany(() => WebinarModel)
-  public webinars: WebinarModel[];
-
 }

@@ -7,7 +7,6 @@ import { Buttons, Phrases, Translator } from "@core/bots/translator";
 import { Configurator } from "@core/bots/Configurator";
 import { Options } from "../decorators";
 import {Redis} from "@core/Redis";
-import {ManualInviteModel} from "@core/models/manualInvite.model";
 
 @Options(StateName.ContactCollection)
 export class ContactCollectionState extends State {
@@ -37,7 +36,8 @@ export class ContactCollectionState extends State {
         const isUpdated = await user.updateContacts(data.original, additional.contactType);
 
         if(isUpdated) {
-            await ManualInviteModel.create({userId: user.id, date: new Date()});
+            // await ManualInviteModel.create({userId: user.id, date: new Date()});
+            // ToDo: Create table for manual invites
             await user.bot.sendMessage(user.botId, `Спасибо, мы свяжемся с тобой в ближайшее время =)\nА пока предлагаем подписаться на наши страницы в соц. сетях !`);
             await user.bot.sendSocialLinks(user.botId);
         } else {

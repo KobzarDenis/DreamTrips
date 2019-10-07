@@ -1,5 +1,5 @@
 import {
-  BelongsTo,
+  BelongsTo, BelongsToMany,
   Column,
   DataType,
   DefaultScope,
@@ -10,6 +10,7 @@ import {
 import * as sequelize from "sequelize";
 import {UserModel} from "@core/models/user.model";
 import {MeetingRequestModel} from "@core/models/meetingRequest.model";
+import {UserWebinarModel} from "@core/models/userWebinar.model";
 
 @DefaultScope({
   attributes: ["id", "email", "phoneNumber", "firstName", "lastName", "botSource", "botId", "lang", "uuid"]
@@ -33,11 +34,5 @@ export class WebinarModel extends Model<WebinarModel> {
     allowNull: false
   })
   public date: Date;
-
-  @HasMany(() => UserModel)
-  public users: UserModel[]
-
-  @HasMany(() => MeetingRequestModel)
-  public meetingRequests: MeetingRequestModel[]
 
 }
