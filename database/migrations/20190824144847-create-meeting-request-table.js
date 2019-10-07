@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('meetingPlans', {
+    return queryInterface.createTable('meetingRequests', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -15,32 +15,37 @@ module.exports = {
         references: {
           model: {
             tableName: "users",
-            schema: "users"
+            schema: "clients"
           },
           key: "id"
         }
       },
       isApplied: {
         type: Sequelize.BOOLEAN,
-        allowNull: true,
+        allowNull: false,
         defaultValue: false
       },
-      date: {
-        type: Sequelize.DATE,
-        allowNull: false
+      isManual: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
       },
       part: {
         type: Sequelize.ENUM("noon", "evening"),
-        allowNull: false
+        allowNull: true,
       },
       type: {
         type: Sequelize.ENUM("travel", "business", "both"),
-        allowNull: false
+        allowNull: true,
       },
-    }, {schema: 'users'});
+      createdAt: {
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
+      }
+    }, {schema: 'clients'});
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('meetingPlans');
+    return queryInterface.dropTable('meetingRequests');
   }
 };

@@ -1,4 +1,5 @@
 export class DateHelper {
+
   public static getClosestEventDate() {
     const date = new Date();
     date.setDate(date.getDate() + (6 + 7 - date.getDay()) % 7);
@@ -7,6 +8,9 @@ export class DateHelper {
   }
 
   public static getNextEventDate() {
-    return Date.now() + 5;
+    const date = new Date();
+    date.setDate(date.getDate() + (6 + 7 - date.getDay()) % 14);
+
+    return date;
   }
 }

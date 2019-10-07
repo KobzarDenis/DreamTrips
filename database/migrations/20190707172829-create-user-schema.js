@@ -2,10 +2,10 @@
 
 module.exports = {
     up: (queryInterface, Sequelize) => {
-        return queryInterface.createSchema('users');
+        return queryInterface.createSchema('clients');
     },
 
     down: (queryInterface, Sequelize) => {
-        return queryInterface.dropSchema('users');
+        return queryInterface.dropSchema('clients');
     }
 };

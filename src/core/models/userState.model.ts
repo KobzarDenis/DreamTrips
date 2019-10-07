@@ -12,10 +12,10 @@ import { UserModel } from "./user.model";
     timestamps: false,
     paranoid: false,
     freezeTableName: true,
-    tableName: "manualInvites",
-    schema: "users"
+    tableName: "userStates",
+    schema: "clients"
 })
-export class ManualInviteModel extends Model<ManualInviteModel> {
+export class UserStateModel extends Model<UserStateModel> {
     @ForeignKey(() => UserModel)
     @Column({
         type: DataType.INTEGER,
@@ -24,10 +24,16 @@ export class ManualInviteModel extends Model<ManualInviteModel> {
     public userId: number;
 
     @Column({
-        type: DataType.DATE,
+        type: DataType.STRING,
         allowNull: false
     })
-    public date: Date;
+    public state: Date;
+
+    @Column({
+        type: DataType.ENUM("unknown", "agree", "uncertainty", "block", "discard"),
+        allowNull: false
+    })
+    public mood: Date;
 
     @BelongsTo(() => UserModel)
     public user: UserModel;

@@ -5,12 +5,13 @@ import {
   ForeignKey,
   Model,
   Table,
-  BelongsTo
+  BelongsTo, HasMany
 } from "sequelize-typescript";
 import { UserModel } from "./user.model";
+import {WebinarModel} from "@core/models/webinar.model";
 
 @DefaultScope({
-  attributes: ["id", "userId", "isApplied", "date", "part"],
+  attributes: ["id", "userId", "isApplied", "isManual", "createdAt", "part"],
   include: [
     {
       model: () => UserModel
@@ -21,10 +22,10 @@ import { UserModel } from "./user.model";
   timestamps: false,
   paranoid: false,
   freezeTableName: true,
-  tableName: "meetingPlans",
-  schema: "users"
+  tableName: "meetingRequests",
+  schema: "clients"
 })
-export class MeetingPlanModel extends Model<MeetingPlanModel> {
+export class MeetingRequestModel extends Model<MeetingRequestModel> {
   @ForeignKey(() => UserModel)
   @Column({
     type: DataType.INTEGER,
@@ -40,10 +41,17 @@ export class MeetingPlanModel extends Model<MeetingPlanModel> {
   public isApplied: boolean;
 
   @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: false,
+    allowNull: false
+  })
+  public isManual: boolean;
+
+  @Column({
     type: DataType.DATE,
     allowNull: false
   })
-  public date: Date;
+  public createdAt: Date;
 
   @Column({
     type: DataType.ENUM(["noon", "evening"]),
@@ -59,5 +67,8 @@ export class MeetingPlanModel extends Model<MeetingPlanModel> {
 
   @BelongsTo(() => UserModel)
   public user: UserModel;
+
+  @HasMany(() => WebinarModel)
+  public webinars: WebinarModel[];
 
 }

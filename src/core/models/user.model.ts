@@ -3,13 +3,13 @@ import {
   CreatedAt,
   DataType,
   DefaultScope,
-  ForeignKey, HasMany,
+  HasMany,
   Model,
   Table,
-  UpdatedAt
+  UpdatedAt, HasOne
 } from "sequelize-typescript";
-import {ManualInviteModel} from "./manualInvite.model"
-import {MeetingPlanModel} from "./meetingPlan.model"
+import {UserStateModel} from "./userState.model"
+import {MeetingRequestModel} from "./meetingRequest.model"
 import * as sequelize from "sequelize";
 
 @DefaultScope({
@@ -20,34 +20,39 @@ import * as sequelize from "sequelize";
   paranoid: false,
   freezeTableName: true,
   tableName: "users",
-  schema: "users"
+  schema: "clients"
 })
 export class UserModel extends Model<UserModel> {
   @Column({
+    type: DataType.STRING,
     unique: true,
     allowNull: true
   })
   public email: string;
 
   @Column({
+    type: DataType.STRING,
     unique: true,
     allowNull: true
   })
   public phoneNumber: string;
 
   @Column({
+    type: DataType.STRING,
     allowNull: true
   })
   public password: string;
 
   @Column
   @Column({
+    type: DataType.STRING,
     allowNull: true
   })
   public firstName: string;
 
   @Column
   @Column({
+    type: DataType.STRING,
     allowNull: true
   })
   public lastName: string;
@@ -57,13 +62,6 @@ export class UserModel extends Model<UserModel> {
     allowNull: true
   })
   public botSource: string;
-
-  @Column({
-    type: DataType.ENUM(["unknown", "agree", "uncertainty", "block", "discard"]),
-    allowNull: true,
-    defaultValue: "unknown"
-  })
-  public mood: string;
 
   @Column({
     type: DataType.ENUM(["ua", "ru"]),
@@ -91,10 +89,10 @@ export class UserModel extends Model<UserModel> {
   @UpdatedAt
   public updatedAt: Date;
 
-  @HasMany(() => MeetingPlanModel)
-  public meetings: MeetingPlanModel[]
+  @HasMany(() => MeetingRequestModel)
+  public meetingRequests: MeetingRequestModel[]
 
-  @HasMany(() => ManualInviteModel)
-  public manualInvites: ManualInviteModel[]
+  @HasOne(() => UserStateModel)
+  public state: UserStateModel
 
 }

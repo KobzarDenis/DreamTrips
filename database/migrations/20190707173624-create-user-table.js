@@ -26,6 +26,10 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: true
             },
+            lang: {
+                type: Sequelize.ENUM("ua", "ru"),
+                allowNull: true,
+            },
             password: {
                 allowNull: true,
                 type: Sequelize.TEXT
@@ -52,7 +56,7 @@ module.exports = {
                 type: Sequelize.DATE,
                 defaultValue: Sequelize.NOW
             }
-        }, {schema: 'users'});
+        }, {schema: 'clients'});
     },
 
     down: (queryInterface, Sequelize) => {

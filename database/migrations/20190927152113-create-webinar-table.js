@@ -2,24 +2,23 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('cronJobs', {
+    return queryInterface.createTable('webinars', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
-      name: {
+      link: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true
       },
-      interval: {
-        type: Sequelize.STRING,
-        allowNull: false
+      date: {
+        type: Sequelize.DATE
       }
-    }, {schema: 'system'});
+    }, {schema: 'clients'});
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('cronJobs');
+    return queryInterface.dropTable('webinars');
   }
 };

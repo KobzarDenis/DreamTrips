@@ -3,6 +3,7 @@ import {Bot} from "../bots";
 import {Langs} from "@core/bots/translator";
 import {IncomingMessage} from "@core/bots/Bot";
 import {UserModel} from "@core/models/user.model";
+import {UserStateModel} from "@core/models/userState.model";
 import {validator} from "@core/validators";
 import {ValidationError} from "@core/errors";
 import { Logger } from "@core/Logger";
@@ -58,7 +59,11 @@ export class User {
     }
 
     public async updateMood(mood: MoodState) {
-        await UserModel.update({mood}, {where: {id: this.id}});
+        await UserStateModel.update({mood}, {where: {userId: this.id}});
+    }
+
+    public async updateState(state: string) {
+        await UserStateModel.update({state}, {where: {userId: this.id}});
     }
 
     public async updateContacts(contactData: string, type: ContactType): boolean {
