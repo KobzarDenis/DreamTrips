@@ -25,11 +25,9 @@ export class ManualInviteState extends State {
   protected async do(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     switch (data.command) {
       case Configurator.getButtonValue(Buttons.I_WONT_BE_ABLE_AT_THIS_TIME):
-        await user.updateMood(MoodState.AGREE);
         await this.askContacts(user);
         break;
       case Configurator.getButtonValue(Buttons.I_WONT_BE_ABLE_AT_THIS_DAY):
-        await user.updateMood(MoodState.AGREE);
         await this.inviteToNextWeek(user);
         break;
       case Configurator.getButtonValue(Buttons.NOT_INTERESTED):
@@ -72,10 +70,10 @@ export class ManualInviteState extends State {
     const message = Translator.getMessage(user.lang, Phrases.HOPE_TO_SEE_YOU_NEXT_TIME, [user.name]);
     await user.bot.sendMessage(user.botId, message);
     await user.bot.sendSocialLinks(user.botId);
-    await user.updateMood(MoodState.DISCARD);
+    // ToDo: USER MOOD UPDATE
   }
 
   protected async reply(user: User, data: IncomingMessage, additional?: any): Promise<void> {
-    await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`);
+    await super.reply(user, data, additional);
   }
 }

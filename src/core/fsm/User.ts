@@ -21,7 +21,6 @@ export enum ContactType {
     Email = 'email'
 }
 
-//ToDo: Create type file with bot types, message types
 export class User {
 
     public id: number;
@@ -45,10 +44,6 @@ export class User {
         this._currentStateName = this._currentState.name;
     }
 
-    /**
-     * Change user's state
-     * @param {State} state - state instance
-     */
     public setState(state: State): void {
         if (!state) {
             throw new Error(`Incorrect state!`);
@@ -58,15 +53,17 @@ export class User {
         this._currentStateName = state.name;
     }
 
-    public async updateMood(mood: MoodState) {
-        await UserStateModel.update({mood}, {where: {userId: this.id}});
+    public async updateStateAndMood(state: string, mood: MoodState): Promise<boolean> {
+        try {
+            await UserStateModel.update({state, mood}, {where: {userId: this.id}});
+            return true;
+        } catch (e) {
+            Logger.getInstance().error(`Cannot update user's contacts: userId - [${this.id}], error - [${e.message}]`);
+            return false;
+        }
     }
 
-    public async updateState(state: string) {
-        await UserStateModel.update({state}, {where: {userId: this.id}});
-    }
-
-    public async updateContacts(contactData: string, type: ContactType): boolean {
+    public async updateContacts(contactData: string, type: ContactType): Promise<boolean> {
         let contactInfo;
         if (type === ContactType.PhoneNumber) {
             contactInfo = {
@@ -91,7 +88,7 @@ export class User {
         }
     }
 
-    public async handleAction(data: IncomingMessage, additional?: any) {
+    public async handleAction(data: IncomingMessage, additional?: any): Promise<void> {
         try {
             await this._currentState.handleAction(this, data, additional);
         } catch (e) {
@@ -99,7 +96,7 @@ export class User {
         }
     }
 
-    public async processText(data: IncomingMessage, additional?: any) {
+    public async processText(data: IncomingMessage, additional?: any): Promise<void> {
         try {
             await this._currentState.processText(this, data, additional);
         } catch (e) {
@@ -120,7 +117,7 @@ export class User {
     }
 
     /**
-     * Pack user's data for set in to temp DB
+     * Pack user's data to set into temp storage
      */
     public pack(additional: any): string {
         const dto = {

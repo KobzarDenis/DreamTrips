@@ -33,14 +33,14 @@ module.exports = {
     },
     socialLinks: {
         telegram: process.env.TELEGRAM_LINK || "https://t.me/dream_trips_team",
-        facebook: process.env.FACEBOOK_LINK || "https://www.facebook.com/devtestpageme/",
-        instagram: process.env.INSTAGRAM_LINK || "https://www.instagram.com/d.kobzar/"
+        facebook: process.env.FACEBOOK_LINK || "https://www.facebook.com/dreamtripsteam.ua/",
+        instagram: process.env.INSTAGRAM_LINK || "https://www.instagram.com/dreamtrips_team.ua/"
     },
     awsCredentials: {
         accessKeyID : process.env.AWS_KEY_ID || "AKIA4AG7ZVSK2JQFX6FB",
         accessKeySecret : process.env.AWS_KEY_SECRET || "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"
     },
     mediaResources: {
-        videoAbout: ``
+        videoAbout: `video/dreamtrips.mp4`
     }
 };

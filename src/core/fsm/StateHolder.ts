@@ -3,6 +3,7 @@ import {Redis} from "@core/Redis";
 import {Langs} from "@core/bots/translator";
 import {UserModel} from "@core/models/user.model";
 import {Op} from "sequelize";
+import {UserStateModel} from "@core/models/userState.model";
 
 export class StateHolder {
 
@@ -31,9 +32,10 @@ export class StateHolder {
         } else {
             $user = new UserModel({firstName, lastName, botSource, botId, lang});
             await $user.save();
+            await UserStateModel.create({userId: $user.id, state: "greeting", mood: "unknown"});
         }
 
-        const user = new User($user.id, $user.firstName || firstName, $user.lang || lang, StateHolder.bots[botSource], botSource, botId);
+        const user = new User($user.id, $user.firstName, $user.lang, StateHolder.bots[botSource], botSource, botId);
         await StateHolder.setUser(`${botSource}__${botId}`, user);
         await user.handleAction({chat: {id: botId}, userId: $user.uuid, payload: null, command: "", original: ""});
     }
@@ -48,8 +50,8 @@ export class StateHolder {
         };
     }
 
-    public static async setUser(key: string, user: User, ttl: number = Redis.WEEK_TTL, additional?: any): Promise<boolean> {
-        return await Redis.getInstance().setItem(key, user.pack(additional), ttl);
+    public static async setUser(key: string, user: User, ttl?: number, additional?: any): Promise<boolean> {
+        return await Redis.getInstance().setItem(key, user.pack(additional), ttl || Redis.WEEK_TTL);
     }
 
 }

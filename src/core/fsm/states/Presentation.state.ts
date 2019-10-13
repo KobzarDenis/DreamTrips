@@ -39,7 +39,7 @@ export class PresentationState extends State {
         break;
       case Configurator.getButtonValue(Buttons.IM_NOT_SURE):
         await super.changeState(user, ObjectionsState.getInstance(), Redis.MONTH_TTL);
-        await user.updateMood(MoodState.UNCERTAINTY);
+        await user.updateStateAndMood(this.name, MoodState.UNCERTAINTY);
         await user.handleAction(data);
         break;
     }
@@ -89,7 +89,7 @@ export class PresentationState extends State {
   }
 
   protected async reply(user: User, data: IncomingMessage, additional?: any): Promise<void> {
-    await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
+    await super.reply(user, data, additional);
   }
 
 }

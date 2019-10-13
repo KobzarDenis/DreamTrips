@@ -64,6 +64,6 @@ export class AttractionFirstState extends State {
   }
 
   protected async reply(user: User, data: IncomingMessage, additional?: any): Promise<void> {
-    await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
+    await super.reply(user, data, additional);
   }
 }

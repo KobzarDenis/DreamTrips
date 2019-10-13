@@ -5,6 +5,7 @@ import { WhoWeAreState } from "./WhoWeAre.state";
 import { Buttons, Phrases, Translator } from "@core/bots/translator";
 import { Configurator } from "@core/bots/Configurator";
 import { Options } from "../decorators";
+import * as appConfig from "../../../../appconfig";
 
 @Options(StateName.Intro)
 export class IntroState extends State {
@@ -45,7 +46,7 @@ export class IntroState extends State {
         await user.bot.typingOn(user.botId);
         setTimeout(async () => {
           await user.bot.typingOff(user.botId);
-          await user.bot.sendVideo(user.botId, "video/dreamtrips.mp4");
+          await user.bot.sendVideo(user.botId, appConfig.mediaResources.videoAbout);
           await user.bot.typingOn(user.botId);
           setTimeout(async () => {
             await user.bot.typingOff(user.botId);
@@ -58,6 +59,6 @@ export class IntroState extends State {
   }
 
   protected async reply(user: User, data: IncomingMessage, additional?: any): Promise<void> {
-    await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
+    await super.reply(user, data, additional);
   }
 }

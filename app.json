@@ -5,8 +5,17 @@
     "heroku-postgresql",
     {
       "as": "DATABASE_URL",
+      "plan": "hobby-basic",
       "options": {
-        "name": "dreamtrips-postgres"
+        "name": "dreamtrips-prod-postgres"
+      }
+    },
+    "heroku-redis",
+    {
+      "as": "REDIS_URL",
+      "plan": "hobby-dev",
+      "options": {
+        "name": "dreamtrips-prod-redis"
       }
     }
   ]

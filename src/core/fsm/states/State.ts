@@ -1,6 +1,7 @@
 import { User } from "../User";
 import { IncomingMessage } from "@core/bots/Bot";
 import { Redis } from "@core/Redis";
+import {Phrases, Translator} from "@core/bots/translator";
 
 export enum StateName {
   Greeting = 'greeting',
@@ -20,6 +21,7 @@ export enum StateName {
 }
 
 export abstract class State {
+  public name: StateName;
 
   protected constructor() {
 
@@ -47,7 +49,10 @@ export abstract class State {
    * @param {IncomingMessage} data - incoming message
    * @return {Promise<void>}
    */
-  protected async abstract reply(user: User, data: IncomingMessage, additional?: any): Promise<void>;
+  protected async reply(user: User, data: IncomingMessage, additional?: any): Promise<void> {
+    const message = Translator.getMessage(user.lang, Phrases.COMMON_REPLY);
+    await user.bot.sendMessage(user.botId, message);
+  };
 
   /**
    * Do action on current state

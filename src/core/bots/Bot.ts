@@ -25,10 +25,10 @@ export type Button = {
 
 export abstract class Bot extends EventEmitter {
 
-  public static readonly SHORT_PAUSE_MS = 800;
-  public static readonly MID_PAUSE_MS = 1500;
-  public static readonly LONG_PAUSE_MS = 3000;
-  public static readonly VIDEO_PAUSE = 3000;
+  public static readonly SHORT_PAUSE_MS = 2 * 1000;
+  public static readonly MID_PAUSE_MS = 5 * 1000;
+  public static readonly LONG_PAUSE_MS = 15 * 1000;
+  public static readonly VIDEO_PAUSE = 5 * 60 * 1000;
 
   public source: string;
 

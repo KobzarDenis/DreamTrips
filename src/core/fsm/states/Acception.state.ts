@@ -39,12 +39,11 @@ export class AcceptionState extends State {
             type: data.payload[0]
         });
 
-        await user.updateMood(MoodState.AGREE);
         await super.changeState(user, FinishState.getInstance(), Redis.MONTH_TTL);
     }
 
     protected async reply(user: User, data: IncomingMessage, additional?: any): Promise<void> {
-        await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
+        await super.reply(user, data, additional);
     }
 
 }

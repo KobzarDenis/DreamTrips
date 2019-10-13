@@ -24,7 +24,6 @@ export class InvitaionState extends State {
     return InvitaionState._instance;
   }
 
-  //ToDo: Create next state!!!
   protected async do(user: User, data: IncomingMessage, additional?: any): Promise<void> {
     let message: string;
     switch (data.command) {
@@ -86,17 +85,15 @@ export class InvitaionState extends State {
         break;
       case Configurator.getButtonValue(Buttons.I_WONT_COMING):
         await super.changeState(user, ObjectionsState.getInstance(), Redis.MONTH_TTL);
-        await user.updateMood(MoodState.BLOCK);
         await user.handleAction(data);
         break;
       default:
-        await user.bot.sendMessage(user.botId, `${user.name}, choose your variant please...`);
         break;
     }
   }
 
   protected async reply(user: User, data: IncomingMessage, additional?: any): Promise<void> {
-    await user.bot.sendMessage(user.botId, `You are currently in ${this.name} state.`)
+    await super.reply(user, data, additional);
   }
 
 }
