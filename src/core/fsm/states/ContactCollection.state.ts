@@ -36,7 +36,7 @@ export class ContactCollectionState extends State {
         if(isUpdated) {
             await PendingUserModel.create({userId: user.id, type:additional.contactType});
             //ToDo: Send to system bot info
-            await user.bot.sendMessage(user.botId, Translator.getMessage(user.lang, Phrases.CONTACTS_UPDATE_SUCCESS));
+            await user.bot.sendMessage(user.botId, Translator.getMessage(user.lang, Phrases.CONTACTS_UPDATE_SUCCESS, [user.name]));
             await user.bot.sendSocialLinks(user.botId);
         } else {
             await user.bot.sendMessage(user.botId, Translator.getMessage(user.lang, Phrases.CONTACTS_UPDATE_ERROR));
