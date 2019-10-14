@@ -23,7 +23,7 @@ module.exports = {
         type: Sequelize.ENUM("email", "phone-number"),
         allowNull: false,
       },
-      sate: {
+      state: {
         type: Sequelize.ENUM("contacted", "not-contacted"),
         allowNull: false,
         defaultValue: "not-contacted"
