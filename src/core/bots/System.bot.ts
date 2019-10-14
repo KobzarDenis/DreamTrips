@@ -58,19 +58,19 @@ export class SystemBot extends EventEmitter {
     }
 
     private async onMessage(message: IncomingMessage) {
-        const admin = this.admins.get(<string> message.chatId);
+        const admin = this.admins.get(message.chat.id);
         if(!admin) {
             const $admin = <AdminModel> await AdminModel.findOne({where: {uuid: message.original}});
             if(!$admin) {
                 this.sendAuth(message);
             }
 
-            $admin.botId = <string> message.chatId;
+            $admin.botId = message.chat.id;
             await $admin.save();
 
-            this.admins.set(<string> message.chatId, $admin);
+            this.admins.set(message.chat.id, $admin);
             Logger.getInstance().info(`Admin signed in : [email: ${$admin.email}, botId: ${$admin.botId}]`);
-            this.sendMessage(<string> message.chatId, 'Вы успешно вошли в аккаунт!');
+            this.sendMessage(message.chat.id, 'Вы успешно вошли в аккаунт!');
         }
 
         this.emit(message.command, message, admin);
@@ -167,9 +167,9 @@ export class SystemBot extends EventEmitter {
     }
 
     private async setup(message: IncomingMessage) {
-        const admin = this.admins.get(<string> message.chatId);
+        const admin = this.admins.get(message.chat.id);
         if(!admin) {
-            await Redis.getInstance().setItem(this.getKey(<string> message.chatId), null);
+            await Redis.getInstance().setItem(this.getKey(message.chat.id), null);
         }
     }
 
