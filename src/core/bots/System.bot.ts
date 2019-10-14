@@ -69,6 +69,7 @@ export class SystemBot extends EventEmitter {
             await $admin.save();
 
             this.admins.set(<string> message.chatId, $admin);
+            Logger.getInstance().info(`Admin signed in : [email: ${$admin.email}, botId: ${$admin.botId}]`);
             this.sendMessage(<string> message.chatId, 'Вы успешно вошли в аккаунт!');
         }
 
