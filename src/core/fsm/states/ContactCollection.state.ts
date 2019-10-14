@@ -26,7 +26,9 @@ export class ContactCollectionState extends State {
     protected async do(user: User, data: IncomingMessage, additional?: any): Promise<void> {
         let additionalInfo = {contactType: data.command.substring(1)};
 
-        await user.bot.sendMessage(user.botId, Translator.getMessage(user.lang, Phrases.TYPE_CONTACT));
+        const contactType = additional.contactType === "email" ? "email" : "телефон";
+
+        await user.bot.sendMessage(user.botId, Translator.getMessage(user.lang, Phrases.TYPE_CONTACT, [contactType]));
         await super.changeState(user, this, Redis.WEEK_TTL, additionalInfo);
     }
 
@@ -34,7 +36,7 @@ export class ContactCollectionState extends State {
         const isUpdated = await user.updateContacts(data.original, additional.contactType);
 
         if(isUpdated) {
-            await PendingUserModel.create({userId: user.id, type:additional.contactType});
+            await PendingUserModel.create({userId: user.id, type: additional.contactType, state: "not-contacted"});
             //ToDo: Send to system bot info
             await user.bot.sendMessage(user.botId, Translator.getMessage(user.lang, Phrases.CONTACTS_UPDATE_SUCCESS, [user.name]));
             await user.bot.sendSocialLinks(user.botId);

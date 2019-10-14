@@ -11,6 +11,7 @@ import {
 import {UserStateModel} from "./userState.model"
 import {MeetingRequestModel} from "./meetingRequest.model"
 import * as sequelize from "sequelize";
+import {PendingUserModel} from "@core/models/pendingUser.model";
 
 @DefaultScope({
   attributes: ["id", "email", "phoneNumber", "firstName", "lastName", "botSource", "botId", "uuid"]
@@ -94,5 +95,8 @@ export class UserModel extends Model<UserModel> {
 
   @HasOne(() => UserStateModel)
   public state: UserStateModel
+
+  @HasOne(() => PendingUserModel)
+  public pending: PendingUserModel
 
 }
