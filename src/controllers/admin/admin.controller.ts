@@ -13,7 +13,7 @@ export class AdminController {
 
     Logger.getInstance().info(`Admin login: [${req.body.email}]`);
 
-    const $admin = new AdminModel(req.body);
+    const $admin = await AdminModel.findOne({where: {email: req.body.email, password: req.body.password}});
 
     return $admin;
   }
