@@ -60,7 +60,7 @@ export class SystemBot extends EventEmitter {
     private async onMessage(message: IncomingMessage) {
         const admin = this.admins.get(<string> message.chatId);
         if(!admin) {
-            const $admin = <AdminModel> await AdminModel.findOne({where: {uuid: message.payload[0]}});
+            const $admin = <AdminModel> await AdminModel.findOne({where: {uuid: message.original}});
             if(!$admin) {
                 this.sendAuth(message);
             }
