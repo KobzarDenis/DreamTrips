@@ -47,6 +47,7 @@ export class SystemBot extends EventEmitter {
     }
 
     public async loadAdmins(): Promise<void> {
+        this.admins = new Map<string, AdminModel>();
         const adminArr = await AdminModel.findAll();
         adminArr.forEach(admin => {
             if (admin.botId) {
