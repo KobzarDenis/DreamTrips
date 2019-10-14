@@ -2,6 +2,7 @@ import { User } from "../User";
 import { IncomingMessage } from "@core/bots/Bot";
 import { Redis } from "@core/Redis";
 import {Phrases, Translator} from "@core/bots/translator";
+import {SystemBot} from "@core/bots";
 
 export enum StateName {
   Greeting = 'greeting',
@@ -40,6 +41,8 @@ export abstract class State {
    * @param {User} user - instance of user
    */
   public async processText(user: User, data: IncomingMessage, additional?: any): Promise<void> {
+    const message = `${user.name} sent new message:\n${data.original}`;
+    SystemBot.getInstance().broadcast(message);
     await this.reply(user, data, additional);
   }
 

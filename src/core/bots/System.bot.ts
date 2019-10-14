@@ -1,16 +1,21 @@
 import * as TelegramAPI from "node-telegram-bot-api";
 import {Button, IncomingMessage} from "@core/bots/Bot";
-import { Command } from "@core/bots/Configurator";
-import { EventEmitter } from "events";
+import {Command} from "@core/bots/Configurator";
+import {EventEmitter} from "events";
+import {Redis} from "@core/Redis";
+import {AdminModel} from "@core/models/admin.model";
+import {Logger} from "@core/Logger";
+import {message} from "aws-sdk/clients/sns";
 
 //ToDo: finish it
 export class SystemBot extends EventEmitter {
     private bot: TelegramAPI;
+    private admins: Map<string, AdminModel>;
     public static _instance: SystemBot;
 
     private constructor(token: string) {
         super();
-        this.bot = new TelegramAPI(token, { polling: true });
+        this.bot = new TelegramAPI(token, {polling: true});
     }
 
     public static getInstance(token?: string): SystemBot {
@@ -41,12 +46,39 @@ export class SystemBot extends EventEmitter {
         this.on(Command.Setup, this.setup.bind(this));
     }
 
-    private async onMessage(message: IncomingMessage) {
+    public async loadAdmins(): Promise<void> {
+        const adminArr = await AdminModel.findAll();
+        adminArr.forEach(admin => {
+            if (admin.botId) {
+                Logger.getInstance().info(`Admin signed in : [email: ${admin.email}, botId: ${admin.botId}]`);
+                this.admins.set(admin.botId, admin);
+            }
+        });
+    }
 
+    private async onMessage(message: IncomingMessage) {
+        const admin = this.admins.get(<string> message.chatId);
+        if(!admin) {
+            const $admin = <AdminModel> await AdminModel.findOne({where: {uuid: message.payload[0]}});
+            if(!$admin) {
+                this.sendAuth(message);
+            }
+
+            $admin.botId = <string> message.chatId;
+            await $admin.save();
+
+            this.admins.set(<string> message.chatId, $admin);
+        }
+
+        this.emit(message.command, message, admin);
     }
 
     private async onCallback(message: IncomingMessage) {
 
+    }
+
+    public async sendAuth(message: IncomingMessage) {
+        this.sendMessage(<string> message.chatId, `Введите Ваш uuid для авторизации.`);
     }
 
     public buttonsBuilder(template: Button | Button[]) {
@@ -73,7 +105,7 @@ export class SystemBot extends EventEmitter {
                 }]);
             }
 
-            options.reply_markup = JSON.stringify({ inline_keyboard, hide_keyboard: true });
+            options.reply_markup = JSON.stringify({inline_keyboard, hide_keyboard: true});
 
             return options;
         }
@@ -115,23 +147,36 @@ export class SystemBot extends EventEmitter {
         return message;
     }
 
-    private async start() {
+    private async start(message: IncomingMessage, admin: AdminModel) {
+        await this.sendAuth(message);
+    }
+
+    private async help(message: IncomingMessage, admin: AdminModel) {
 
     }
 
-    private async help() {
+    private async subscribe(message: IncomingMessage, admin: AdminModel) {
 
     }
 
-    private async subscribe() {
+    private async remindMe(message: IncomingMessage, admin: AdminModel) {
 
     }
 
-    private async remindMe() {
-
+    private async setup(message: IncomingMessage) {
+        const admin = this.admins.get(<string> message.chatId);
+        if(!admin) {
+            await Redis.getInstance().setItem(this.getKey(<string> message.chatId), null);
+        }
     }
 
-    private async setup() {
+    public async broadcast(message: string): Promise<void> {
+        this.admins.forEach(admin => {
+            this.sendMessage(admin.botId, message);
+        });
+    }
 
+    private getKey(botId: string): string {
+        return `admin_${botId}`;
     }
 }

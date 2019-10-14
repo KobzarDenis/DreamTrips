@@ -47,6 +47,9 @@ module.exports = {
       updatedAt: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
+      },
+      lastLogin: {
+        type: Sequelize.DATE
       }
     }, {schema: 'admin'});
   },

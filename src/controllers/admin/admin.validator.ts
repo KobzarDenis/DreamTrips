@@ -18,5 +18,6 @@ const loginProperties = {
 
 export const loginValidator = ajv.compile({
   type: "object",
-  required: ["email", "password"]
+  required: ["email", "password"],
+  properties: loginProperties
 });
