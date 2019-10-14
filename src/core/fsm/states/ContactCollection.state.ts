@@ -5,6 +5,7 @@ import {Options} from "../decorators";
 import {Redis} from "@core/Redis";
 import {PendingUserModel} from "@core/models/pendingUser.model";
 import {Phrases, Translator} from "@core/bots/translator";
+import {FinishState} from "@core/fsm/states/Finish.state";
 
 @Options(StateName.ContactCollection)
 export class ContactCollectionState extends State {
@@ -40,6 +41,7 @@ export class ContactCollectionState extends State {
             //ToDo: Send to system bot info
             await user.bot.sendMessage(user.botId, Translator.getMessage(user.lang, Phrases.CONTACTS_UPDATE_SUCCESS, [user.name]));
             await user.bot.sendSocialLinks(user.botId);
+            await super.changeState(user, FinishState.getInstance(), Redis.WEEK_TTL);
         } else {
             await user.bot.sendMessage(user.botId, Translator.getMessage(user.lang, Phrases.CONTACTS_UPDATE_ERROR));
         }

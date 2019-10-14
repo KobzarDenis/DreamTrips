@@ -38,7 +38,8 @@ export enum Phrases {
     TYPE_CONTACT = "type_contact",
     CONTACTS_UPDATE_SUCCESS = "contacts_update_success",
     CONTACTS_UPDATE_ERROR = "contacts_update_error",
-    COMMON_REPLY = "common_reply"
+    COMMON_REPLY = "common_reply",
+    WE_RECEIVED_YOUR_QUESTION = "we_received_your_question"
 }
 
 export enum Buttons {

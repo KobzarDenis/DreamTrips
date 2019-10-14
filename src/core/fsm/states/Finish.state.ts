@@ -1,7 +1,8 @@
-import { State, StateName } from "./State";
-import { User } from "../User";
-import { IncomingMessage } from "@core/bots/Bot";
-import { Options } from "../decorators";
+import {State, StateName} from "./State";
+import {User} from "../User";
+import {IncomingMessage} from "@core/bots/Bot";
+import {Options} from "../decorators";
+import {Phrases, Translator} from "@core/bots/translator";
 
 @Options(StateName.Finish)
 export class FinishState extends State {
@@ -21,13 +22,13 @@ export class FinishState extends State {
   }
 
   protected async do(user: User, data: IncomingMessage, additional?: any): Promise<void> {
-    //const message = Translator.getMessage(user.lang, Phrases.GREETING, [user.name]);
-    const message = `${user.name}, мы получили Ваше сообщение и в скором времени мы на него ответим.\n Если у Вас есть дополнительные вопросы, выберите варианты из нижепредложенных: `
+    const message = Translator.getMessage(user.lang, Phrases.WE_RECEIVED_YOUR_QUESTION, [user.name]);
     await user.bot.sendMessage(user.botId, message);
   }
 
   protected async reply(user: User, data: IncomingMessage, additional?: any): Promise<void> {
-    await super.reply(user, data, additional);
+    const message = Translator.getMessage(user.lang, Phrases.WE_RECEIVED_YOUR_QUESTION, [user.name]);
+    await user.bot.sendMessage(user.botId, message);
   }
 
 }
