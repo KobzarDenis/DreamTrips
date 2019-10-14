@@ -7,8 +7,9 @@ import {UserModel} from "@core/models/user.model";
 export class PendingUserController {
 
     public static async list(req: Request) {
-        Logger.getInstance().info(`List pending: [${JSON.stringify(req.params)}]`);
-        await PendingUserModel.findAll({where: {date: {[Op.lte]: new Date()}}, include: [UserModel]});
+        Logger.getInstance().info(`List pending: [${JSON.stringify(req.params)}], [${JSON.stringify(req.query)}]`);
+        const pendingUsers = await PendingUserModel.findAll({where: {date: {[Op.lte]: new Date()}}, include: [UserModel]});
+        return pendingUsers;
     }
 
 }
