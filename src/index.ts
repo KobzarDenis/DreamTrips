@@ -18,6 +18,8 @@ sm.install();
     try {
         //Creating instances
         Logger.getInstance(appconfig.logger);
+        const db = Database.getInstance(appconfig.database);
+        db.injectModels(path.join(__dirname, "./core/models"));
 
         const es = new ExpressServer(appconfig, path.join(__dirname, './controllers'));
         es.start();
@@ -31,9 +33,6 @@ sm.install();
         systemBot.init();
         await systemBot.loadAdmins();
         Redis.getInstance(appconfig.redis.url);
-
-        const db = Database.getInstance(appconfig.database);
-        db.injectModels(path.join(__dirname, "./core/models"));
 
         botRelation[BotName.Facebook] = FacebookBot.getInstance();
         StateHolder.init(botRelation, stateRelation);
