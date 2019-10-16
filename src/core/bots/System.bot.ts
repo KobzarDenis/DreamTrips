@@ -5,9 +5,7 @@ import {EventEmitter} from "events";
 import {Redis} from "@core/Redis";
 import {AdminModel} from "@core/models/admin.model";
 import {Logger} from "@core/Logger";
-import {message} from "aws-sdk/clients/sns";
 
-//ToDo: finish it
 export class SystemBot extends EventEmitter {
     private bot: TelegramAPI;
     private admins: Map<string, AdminModel>;
@@ -33,11 +31,11 @@ export class SystemBot extends EventEmitter {
     public init() {
         this.bot.on('message', async (msg) => {
             const parsedMessage: IncomingMessage = this.parseMessage(msg);
-            await this.onMessage(parsedMessage);
+            await this.processMessage(parsedMessage, this.onMessage);
         });
         this.bot.on('callback_query', async (msg) => {
             const parsedMessage: IncomingMessage = this.parseMessage(msg);
-            await this.onCallback(parsedMessage);
+            await this.processMessage(parsedMessage, this.onCallback);
         });
         this.on(Command.Subscribe, this.subscribe.bind(this));
         this.on(Command.Start, this.start.bind(this));
@@ -57,28 +55,28 @@ export class SystemBot extends EventEmitter {
         });
     }
 
-    private async onMessage(message: IncomingMessage) {
+    private async processMessage(message: IncomingMessage, cb: any) {
         const admin = this.admins.get(message.chat.id);
         if(!admin) {
-            const $admin = <AdminModel> await AdminModel.findOne({where: {uuid: message.original}});
-            if(!$admin) {
-                this.sendAuth(message);
-                return;
-            }
-
-            $admin.botId = message.chat.id;
-            await $admin.save();
-
-            this.admins.set(message.chat.id, $admin);
-            Logger.getInstance().info(`Admin signed in : [email: ${$admin.email}, botId: ${$admin.botId}]`);
-            this.sendMessage(message.chat.id, 'Вы успешно вошли в аккаунт!');
+            await this.authorize(message);
+        } else {
+            await cb(message, admin);
         }
-
-        this.emit(message.command, message, admin);
     }
 
-    private async onCallback(message: IncomingMessage) {
+    public async authorize(message: IncomingMessage) {
+        const $admin = <AdminModel> await AdminModel.findOne({where: {uuid: message.original}});
+        if(!$admin) {
+            this.sendAuth(message);
+            return;
+        }
 
+        $admin.botId = message.chat.id;
+        await $admin.save();
+
+        this.admins.set(message.chat.id, $admin);
+        Logger.getInstance().info(`Admin signed in : [email: ${$admin.email}, botId: ${$admin.botId}]`);
+        this.sendMessage(message.chat.id, `${$admin.firstName}, Вы успешно вошли в аккаунт!`);
     }
 
     public async sendAuth(message: IncomingMessage) {
@@ -149,6 +147,14 @@ export class SystemBot extends EventEmitter {
         };
 
         return message;
+    }
+
+    private async onMessage(message: IncomingMessage, admin: AdminModel) {
+        this.emit(message.command, message, admin);
+    }
+
+    private async onCallback(message: IncomingMessage, admin: AdminModel) {
+
     }
 
     private async start(message: IncomingMessage, admin: AdminModel) {

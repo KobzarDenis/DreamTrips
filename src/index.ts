@@ -25,7 +25,6 @@ sm.install();
         es.start();
 
         FileManager.init(appconfig.awsCredentials);
-        Scheduler.getInstance().init();
 
         FacebookBot.getInstance(appconfig.bot.facebook.token, es).init();
         TelegramBot.getInstance(appconfig.bot.telegram.token).init();
@@ -37,6 +36,7 @@ sm.install();
         botRelation[BotName.Facebook] = FacebookBot.getInstance();
         StateHolder.init(botRelation, stateRelation);
 
+        Scheduler.getInstance().init();
     } catch (error) {
         throw new Error(error.message);
     }

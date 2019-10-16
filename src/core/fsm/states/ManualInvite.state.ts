@@ -5,6 +5,9 @@ import { Configurator } from "@core/bots/Configurator";
 import { Buttons, Phrases, Translator } from "@core/bots/translator";
 import { Options } from "../decorators";
 import {ContactCollectionState} from "@core/fsm/states/ContactCollection.state";
+import {MeetingRequestModel} from "@core/models/meetingRequest.model";
+import {DateHelper} from "@core/helpers/Date.helper";
+import {FinishState} from "@core/fsm/states/Finish.state";
 
 @Options(StateName.ManualInvite)
 export class ManualInviteState extends State {
@@ -44,7 +47,14 @@ export class ManualInviteState extends State {
     await user.bot.sendMessage(user.botId, message);
     await user.bot.sendSocialLinks(user.botId);
 
-    //ToDo: Create table for manual invites
+    await MeetingRequestModel.create({
+      userId: user.id,
+      date: DateHelper.getNextEventDate(),
+      part: "evening",
+      type: "both"
+    });
+
+    await super.changeState(user, FinishState.getInstance());
   }
 
   private async askContacts(user: User) {
