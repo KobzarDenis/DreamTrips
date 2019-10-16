@@ -10,28 +10,29 @@ export class MeetingController {
             throw new ValidationError(createValidator.errors);
         }
         const $meeting = new WebinarModel(req.body);
+        await $meeting.save();
 
         return $meeting;
     }
 
     public static async createInternal(req: Request) {
-        throw new Error("Not implemented.")
+        throw new Error("Not implemented.");
     }
 
     public static async sendInviteByEmail(req: Request) {
-        throw new Error("Not implemented.")
+        throw new Error("Not implemented.");
     }
 
     public static async sendInviteBySMS(req: Request) {
-        throw new Error("Not implemented.")
+        throw new Error("Not implemented.");
     }
 
     public static async sendInviteByBot(req: Request) {
-        throw new Error("Not implemented.")
+        throw new Error("Not implemented.");
     }
 
     public static async sendBulkInvites(req: Request) {
-        throw new Error("Not implemented.")
+        throw new Error("Not implemented.");
     }
 
 }

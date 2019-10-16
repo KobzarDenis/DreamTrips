@@ -14,15 +14,15 @@ export class MeetingRequestController {
     }
 
     public static async create(req: Request) {
-        throw new Error("Not implemented.")
+        throw new Error("Not implemented.");
     }
 
     public static async delete(req: Request) {
-        throw new Error("Not implemented.")
+        await MeetingRequestModel.destroy({where: {id: req.body.id}});
     }
 
     public static async update(req: Request) {
-        throw new Error("Not implemented.")
+        throw new Error("Not implemented.");
     }
 
 }
