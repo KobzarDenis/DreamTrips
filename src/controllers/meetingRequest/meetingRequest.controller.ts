@@ -7,7 +7,7 @@ export class MeetingRequestController {
 
     public static async list(req: Request) {
         const meetingRequests = await MeetingRequestModel.findAll({
-            where: sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), moment(new Date()).format("YYYY-MM-DD"))
+            where: sequelize.where(sequelize.fn('DATE', sequelize.col(`MeetingRequestModel.createdAt`)), moment(new Date()).format("YYYY-MM-DD"))
         });
 
         return meetingRequests;
