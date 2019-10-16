@@ -49,7 +49,8 @@ export class MeetingRequestModel extends Model<MeetingRequestModel> {
 
   @Column({
     type: DataType.DATE,
-    allowNull: false
+    allowNull: false,
+    defaultValue: () => new Date()
   })
   public createdAt: Date;
 
