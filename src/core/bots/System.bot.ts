@@ -63,6 +63,7 @@ export class SystemBot extends EventEmitter {
             const $admin = <AdminModel> await AdminModel.findOne({where: {uuid: message.original}});
             if(!$admin) {
                 this.sendAuth(message);
+                return;
             }
 
             $admin.botId = message.chat.id;
@@ -81,7 +82,7 @@ export class SystemBot extends EventEmitter {
     }
 
     public async sendAuth(message: IncomingMessage) {
-        this.sendMessage(<string> message.chatId, `Введите Ваш uuid для авторизации.`);
+        this.sendMessage(message.chat.id, `Введите Ваш uuid для авторизации.\nВы можете найти его в личном кабинете.`);
     }
 
     public buttonsBuilder(template: Button | Button[]) {
