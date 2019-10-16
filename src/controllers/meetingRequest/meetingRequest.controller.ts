@@ -1,15 +1,13 @@
 import {Request} from "express";
-import {WebinarModel} from "@core/models/webinar.model";
-import {createValidator} from "./meetingRequest.validator";
-import {ValidationError} from "@core/errors";
 import {MeetingRequestModel} from "@core/models/meetingRequest.model";
 import * as sequelize from "sequelize";
+import * as moment from "moment";
 
 export class MeetingRequestController {
 
     public static async list(req: Request) {
         const meetingRequests = await MeetingRequestModel.findAll({
-            where: sequelize.where(sequelize.fn('DATE', sequelize.col('date')), (new Date()).setHours(0,0,0,0))
+            where: sequelize.where(sequelize.fn('DATE', sequelize.col('createdAt')), moment(new Date()).format("YYYY-MM-DD"))
         });
 
         return meetingRequests;
