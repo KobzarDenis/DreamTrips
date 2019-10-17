@@ -35,7 +35,10 @@ export class WebinarModel extends Model<WebinarModel> {
   })
   public date: Date;
 
-  @HasMany(() => MeetingRequestModel)
+  @HasMany(() => UserWebinarModel, MeetingRequestModel)
   public meetingRequests: MeetingRequestModel[]
+
+  @HasMany(() => UserWebinarModel, UserModel)
+  public users: UserModel[]
 
 }
