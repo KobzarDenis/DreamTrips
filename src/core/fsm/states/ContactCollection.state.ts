@@ -27,7 +27,7 @@ export class ContactCollectionState extends State {
     protected async do(user: User, data: IncomingMessage, additional?: any): Promise<void> {
         let additionalInfo = {contactType: data.command.substring(1)};
 
-        const contactType = additional.contactType === "email" ? "email" : "телефон";
+        const contactType = additionalInfo.contactType === "email" ? "email" : "телефон";
 
         await user.bot.sendMessage(user.botId, Translator.getMessage(user.lang, Phrases.TYPE_CONTACT, [contactType]));
         await super.changeState(user, this, Redis.WEEK_TTL, additionalInfo);
