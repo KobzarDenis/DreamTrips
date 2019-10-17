@@ -3,7 +3,7 @@ import {botRelation, stateRelation} from "@core/helpers/Relation.helper";
 import {Database} from "@core/Database";
 import {Logger} from "@core/Logger";
 import {Redis} from "@core/Redis";
-import * as appconfig from "../appconfig";
+import appconfig from "@config";
 import * as sm from "source-map-support";
 import {TelegramBot, FacebookBot, SystemBot, BotName} from "@core/bots";
 import {ExpressServer} from "@core/servers"

@@ -5,7 +5,7 @@ import { WhoWeAreState } from "./WhoWeAre.state";
 import { Buttons, Phrases, Translator } from "@core/bots/translator";
 import { Configurator } from "@core/bots/Configurator";
 import { Options } from "../decorators";
-import * as appConfig from "../../../../appconfig";
+import appConfig from "@config";
 
 @Options(StateName.Intro)
 export class IntroState extends State {

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     server: {
         port: process.env.PORT || 8080
     },
@@ -42,5 +42,10 @@ module.exports = {
     },
     mediaResources: {
         videoAbout: `video/dreamtrips.mp4`
+    },
+    meeting: {
+        noonTime: process.env.MEETING_TIME_NOON || 12,
+        eveningTime: process.env.MEETING_TIME_EVENING || 20
     }
 };
+

@@ -1,7 +1,7 @@
 import * as TelegramAPI from "node-telegram-bot-api";
 import { Bot, IncomingMessage, Button, BotName } from "@core/bots/Bot";
 import { Command } from "@core/bots/Configurator";
-import * as appconfig from "../../../appconfig";
+import appconfig from "@config";
 import {Logger} from "@core/Logger";
 import {FileManager} from "@core/fileManager";
 

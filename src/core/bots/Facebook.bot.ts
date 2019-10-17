@@ -2,7 +2,7 @@ import { Bot, BotName, Button, IncomingMessage } from "@core/bots/Bot";
 import { Command } from "@core/bots/Configurator";
 import { BUTTON_TYPE, FacebookMessagingAPIClient, IButton } from "fb-messenger-bot-api";
 import { ExpressServer } from "@core/servers/Express.server";
-import * as appconfig from "../../../appconfig";
+import appconfig from "@config";
 
 export class FacebookBot extends Bot {
 

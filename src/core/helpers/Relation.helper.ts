@@ -1,6 +1,6 @@
 import * as bots from "../bots";
 import * as states from "../fsm/states";
-import * as appconfig from "../../../appconfig";
+import appconfig from "@config";
 
 export const stateRelation = {
   [states.StateName.Greeting]: states.GreetingState.getInstance(),
