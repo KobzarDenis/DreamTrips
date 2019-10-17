@@ -49,7 +49,6 @@ export class ManualInviteState extends State {
 
     await MeetingRequestModel.create({
       userId: user.id,
-      date: DateHelper.getNextEventDate(),
       part: "evening",
       type: "both"
     });

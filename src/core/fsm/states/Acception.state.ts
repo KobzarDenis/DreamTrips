@@ -26,17 +26,17 @@ export class AcceptionState extends State {
     }
 
     protected async do(user: User, data: IncomingMessage, additional?: any): Promise<void> {
-        const message = Translator.getMessage(user.lang, Phrases.SEE_YOU, [user.name]);
+        const part = data.command.split('-')[0].substring(1);
+
+        const timeForEvent = DateHelper.getDateAndTimeForEvent(part);
+        const message = Translator.getMessage(user.lang, Phrases.SEE_YOU, [user.name, timeForEvent]);
         await user.bot.sendMessage(user.botId, message);
         await user.bot.sendSocialLinks(user.botId);
 
-        const part = data.command.split('-')[0].substring(1);
-
         await MeetingRequestModel.create({
             userId: user.id,
-            date: DateHelper.getClosestEventDate(),
             part: part || "evening",
-            type: data.payload[0]
+            type: data.payload[0] || "both"
         });
 
         await super.changeState(user, FinishState.getInstance(), Redis.MONTH_TTL);

@@ -1,13 +1,13 @@
 import {Request} from "express";
 import {MeetingRequestModel} from "@core/models/meetingRequest.model";
 import * as sequelize from "sequelize";
-import * as moment from "moment";
+import {DateHelper} from "@core/helpers/Date.helper";
 
 export class MeetingRequestController {
 
     public static async list(req: Request) {
         const meetingRequests = await MeetingRequestModel.findAll({
-            where: sequelize.where(sequelize.fn('DATE', sequelize.col(`MeetingRequestModel.createdAt`)), moment(new Date()).format("YYYY-MM-DD"))
+            where: sequelize.where(sequelize.fn('DATE', sequelize.col(`MeetingRequestModel.createdAt`)), DateHelper.formatToDateOnly(new Date()))
         });
 
         return meetingRequests;
