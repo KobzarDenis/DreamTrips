@@ -1,5 +1,9 @@
 import {ISchedule, CronPeriod} from "./interfaces";
 import {SystemBot} from "@core/bots";
+import {PendingUserModel} from "@core/models/pendingUser.model";
+import {Op} from "sequelize";
+import {DateHelper} from "@core/helpers/Date.helper";
+import {MeetingRequestModel} from "@core/models/meetingRequest.model";
 
 export const jobs: ISchedule[] = [
     {
@@ -25,6 +29,16 @@ export const jobs: ISchedule[] = [
     {
         period: CronPeriod.EveryDayFromSevenTilNinePM,
         name: "Send system statistic",
-        cb: () => {SystemBot.getInstance().broadcast(`Sent statistic`)}
+        cb: async () => {
+            const oneHourAgo = DateHelper.getTimeNHourAgo(1);
+            const countOfPendingUsers = await PendingUserModel.count({where: {date: {[Op.gte]: oneHourAgo}}});
+            const countOfMeetingRequests = await MeetingRequestModel.count({where: {createdAt: {[Op.gte]: oneHourAgo}}});
+
+            const message = `Обновления за прошедший час:\n
+                             Новых заявок на обратную связь: +${countOfPendingUsers}\n
+                             Новых заявок на вебинар: +${countOfMeetingRequests}`;
+
+            SystemBot.getInstance().broadcast(message);
+        }
     }
 ];
