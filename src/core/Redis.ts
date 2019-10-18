@@ -36,4 +36,9 @@ export class Redis {
     return await this.client.set(key, value, 'EX', expirationSec);
   }
 
+  public async getAllKeys(): Promise<string[]> {
+    const keys = await this.client.keysAsync('*');
+    return keys;
+  }
+
 }
