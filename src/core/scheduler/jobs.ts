@@ -45,11 +45,11 @@ export async function sendHourlySystemStatistic() {
     const countOfStartedUsersFB = await UserModel.count({where: {[Op.and]: [{createdAt: {[Op.gte]: oneHourAgo}}, {botSource: "facebook"}]}});
     const countOfStartedUsersTG = await UserModel.count({where: {[Op.and]: [{createdAt: {[Op.gte]: oneHourAgo}}, {botSource: "telegram"}]}});
 
-    const isUpdateExists = !!(oneHourAgo + countOfPendingUsers + countOfMeetingRequests + countOfStartedUsersFB + countOfStartedUsersTG);
+    const isUpdateExists = !!(countOfPendingUsers + countOfMeetingRequests + countOfStartedUsersFB + countOfStartedUsersTG);
     if (isUpdateExists) {
         message = `Обновления за прошедший час:\nНовых заявок на обратную связь: +${countOfPendingUsers}\nНовых заявок на вебинар: +${countOfMeetingRequests}\nПришедших FB: +${countOfStartedUsersFB}, TG: +${countOfStartedUsersTG}`;
     } else {
-        message = `Обновления за прошедший час: 0`;
+        message = `Обновлений за прошедший час - 0`;
     }
 
     await SystemBot.getInstance().broadcast(message);
