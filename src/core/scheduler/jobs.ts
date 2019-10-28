@@ -17,7 +17,7 @@ export async function persistDataFromRedis() {
 
     logger.info(`[persistDataFromRedis] - all keys: ${keys.join(',')}`);
 
-    for (const key in keys) {
+    for (const key of keys) {
         logger.info(`[persistDataFromRedis] - key to process: ${key}`);
         const dto = await redis.getItem(key);
         const userInMemory = JSON.parse(dto);
