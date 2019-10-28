@@ -40,9 +40,11 @@ export class StateHolder {
         await user.handleAction({chat: {id: botId}, userId: $user.uuid, payload: null, command: "", original: ""});
     }
 
+    // ToDo : REFACTOR USER OBTAIN | DELETE LOGGER
     public static async getUserAndMeta(key: string): Promise<any> {
         const dto = await Redis.getInstance().getItem(key);
         let userState;
+        let user;
 
         if (!dto) {
             const conditions = key.split(':');
@@ -52,11 +54,13 @@ export class StateHolder {
                     botId: conditions[1]
                 }, include: [UserStateModel]
             });
+            user = new User(userState.id, userState.firstName, userState.lang, StateHolder.bots[userState.botSource], userState.botSource, userState.botId, StateHolder.states[userState.state.state]);
         } else {
             userState = JSON.parse(dto);
+            user = new User(userState.id, userState.name , userState.lang, StateHolder.bots[userState.botSource], userState.botSource, userState.botId, StateHolder.states[userState.currentStateName]);
         }
 
-        const user = new User(userState.id, userState.name || userState.firstName, userState.lang, StateHolder.bots[userState.botSource], userState.botSource, userState.botId, StateHolder.states[userState.currentStateName || userState.state.state]);
+
 
         return {
             user,

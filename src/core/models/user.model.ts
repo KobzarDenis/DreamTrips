@@ -14,7 +14,7 @@ import * as sequelize from "sequelize";
 import {PendingUserModel} from "@core/models/pendingUser.model";
 
 @DefaultScope({
-  attributes: ["id", "email", "phoneNumber", "firstName", "lastName", "botSource", "botId", "uuid"]
+  attributes: ["id", "email", "lang", "phoneNumber", "firstName", "lastName", "botSource", "botId", "uuid"]
 })
 @Table({
   timestamps: true,
