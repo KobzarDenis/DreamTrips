@@ -7,15 +7,22 @@ import {MeetingRequestModel} from "@core/models/meetingRequest.model";
 import {UserModel} from "@core/models/user.model";
 import {Redis} from "@core/Redis";
 import {UserStateModel} from "@core/models/userState.model";
+import {Logger} from "@core/Logger";
 
 export async function persistDataFromRedis() {
     let counter = 0;
     const redis = Redis.getInstance();
+    const logger = Logger.getInstance();
     const keys = await redis.getAllKeys();
 
+    logger.info(`[persistDataFromRedis] - all keys: ${keys.join(',')}`);
+
     for (const key in keys) {
+        logger.info(`[persistDataFromRedis] - key to process: ${key}`);
         const dto = await redis.getItem(key);
         const userInMemory = JSON.parse(dto);
+        logger.info(`[persistDataFromRedis] - dto: ${dto}`);
+
         const $userState = await UserStateModel.findOne({where: {userId: userInMemory.id}});
 
         if ($userState) {
