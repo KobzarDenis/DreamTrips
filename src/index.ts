@@ -11,6 +11,7 @@ import * as path from "path";
 import {StateHolder} from "@core/fsm";
 import {FileManager} from "@core/fileManager";
 import {Scheduler} from "@core/scheduler";
+import {persistDataFromRedis} from "@core/scheduler/jobs";
 
 sm.install();
 
@@ -32,7 +33,7 @@ sm.install();
         systemBot.init();
         await systemBot.loadAdmins();
         Redis.getInstance(appconfig.redis.url);
-        console.log("REDIS KEYS: ", await Redis.getInstance().getAllKeys());
+        await persistDataFromRedis();
 
         botRelation[BotName.Facebook] = FacebookBot.getInstance();
         StateHolder.init(botRelation, stateRelation);

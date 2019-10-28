@@ -41,8 +41,6 @@ export abstract class State {
    * @param {User} user - instance of user
    */
   public async processText(user: User, data: IncomingMessage, additional?: any): Promise<void> {
-    const message = `${user.name} sent new message:\n${data.original}`;
-    SystemBot.getInstance().broadcast(message);
     await this.reply(user, data, additional);
   }
 

@@ -1,5 +1,5 @@
 export enum CronPeriod {
-    EveryDayAtNight = "0 0 * * *",
+    EveryNight = "0 0 * * *",
     EveryDayAtNoon = "0 12 * * *",
     EveryMondayAtNoon = "0 12 * * 1",
     EverySaturdayAtNine = "0 9 * * 6",

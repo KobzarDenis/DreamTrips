@@ -36,17 +36,31 @@ export class StateHolder {
         }
 
         const user = new User($user.id, $user.firstName, $user.lang, StateHolder.bots[botSource], botSource, botId);
-        await StateHolder.setUser(`${botSource}__${botId}`, user);
+        await StateHolder.setUser(`${botSource}:${botId}`, user);
         await user.handleAction({chat: {id: botId}, userId: $user.uuid, payload: null, command: "", original: ""});
     }
 
     public static async getUserAndMeta(key: string): Promise<any> {
-        const dto = JSON.parse(await Redis.getInstance().getItem(key));
-        const user = new User(dto.id, dto.name, dto.lang, StateHolder.bots[dto.botSource], dto.botSource, dto.botId, StateHolder.states[dto.currentStateName]);
+        const dto = await Redis.getInstance().getItem(key);
+        let userState;
+
+        if (!dto) {
+            const conditions = key.split(':');
+            userState = await UserModel.findOne({
+                where: {
+                    botSource: conditions[0],
+                    botId: conditions[1]
+                }, include: [UserStateModel]
+            });
+        } else {
+            userState = JSON.parse(dto);
+        }
+
+        const user = new User(userState.id, userState.name || userState.firstName, userState.lang, StateHolder.bots[userState.botSource], userState.botSource, userState.botId, StateHolder.states[userState.currentStateName || userState.state.state]);
 
         return {
             user,
-            additional: dto.additional
+            additional: userState.additional || null
         };
     }
 

@@ -36,6 +36,10 @@ export class Redis {
     return await this.client.set(key, value, 'EX', expirationSec);
   }
 
+  public async removeItem(key: string) {
+    return await this.client.delAsync(key);
+  }
+
   public async getAllKeys(): Promise<string[]> {
     const keys = await this.client.keysAsync('*');
     return keys;
