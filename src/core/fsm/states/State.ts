@@ -70,7 +70,7 @@ export abstract class State {
    */
   protected async changeState(user: User, newState: State, ttl: number = Redis.WEEK_TTL, additional?: any): Promise<void> {
     user.setState(newState);
-    await Redis.getInstance().setItem(`${user.botSource}__${user.botId}`, user.pack(additional), ttl);
+    await Redis.getInstance().setItem(`${user.botSource}:${user.botId}`, user.pack(additional), ttl);
   }
 
 }
