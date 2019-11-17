@@ -35,7 +35,7 @@ export const phrases = {
   type_contact: "Напишите, пожалуйста, Ваш {0}...",
   contacts_update_success: "Спасибо {0}, мы свяжемся с тобой в ближайшее время =)\nА пока предлагаем подписаться на наши страницы в соц. сетях !",
   contacts_update_error: "Ошибка при обновлении данных. Напишите, пожалуйста на почту info@dreamtrips-team.com",
-  common_reply: "I'm a smart bot for sure, but it's kinda hard to me to understand human language.\nSo just chose variant above please 😀",
+  common_reply: "I'm a smart bot for sure, but it's kinda hard for me to understand human language.\nSo just chose variant above please 😀",
   we_received_your_question: "{0}, если у Вас есть дополнительные вопросы - напишите, пожалуйста, на почту : info@dreamtrips-team.com"
 };
 
