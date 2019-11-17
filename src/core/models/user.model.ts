@@ -65,7 +65,7 @@ export class UserModel extends Model<UserModel> {
   public botSource: string;
 
   @Column({
-    type: DataType.ENUM(["ua", "ru"]),
+    type: DataType.ENUM(["ua", "ru", "en"]),
     allowNull: true
   })
   public lang: string;

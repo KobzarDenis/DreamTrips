@@ -27,7 +27,7 @@ module.exports = {
                 allowNull: true
             },
             lang: {
-                type: Sequelize.ENUM("ua", "ru"),
+                type: Sequelize.ENUM("ua", "ru", "en"),
                 allowNull: true,
             },
             password: {
