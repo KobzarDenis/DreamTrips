@@ -161,7 +161,8 @@ export class TelegramBot extends Bot {
       reply_markup: JSON.stringify({
         inline_keyboard: [
           [{ text: 'Русский 🇷🇺', callback_data: `${Command.Setup}:ru_${data.userId || 0}` }],
-          [{ text: 'Українська 🇺🇦', callback_data: `${Command.Setup}:ua_${data.userId || 0}` }]
+          [{ text: 'Українська 🇺🇦', callback_data: `${Command.Setup}:ua_${data.userId || 0}` }],
+          [{ text: 'English 🇮🇴', callback_data: `${Command.Setup}:en_${data.userId || 0}` }]
         ]
       })
     };

@@ -123,7 +123,8 @@ export class FacebookBot extends Bot {
     const message = `Выберите язык: `;
     const buttons = [
       { type: BUTTON_TYPE.POSTBACK, title: 'Русский 🇷🇺', payload: `${Command.Setup}:ru_${data.userId || 0}` },
-      { type: BUTTON_TYPE.POSTBACK, title: 'Українська 🇺🇦', payload: `${Command.Setup}:ua_${data.userId || 0}` }
+      { type: BUTTON_TYPE.POSTBACK, title: 'Українська 🇺🇦', payload: `${Command.Setup}:ua_${data.userId || 0}` },
+      { type: BUTTON_TYPE.POSTBACK, title: 'English 🇮🇴', payload: `${Command.Setup}:en_${data.userId || 0}` },
     ];
 
     this.bot.sendButtonsMessage(data.chat.id, message, buttons);

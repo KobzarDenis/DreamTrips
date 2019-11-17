@@ -1,5 +1,6 @@
 import * as RU from "./configs/RU";
 import * as UA from "./configs/UA";
+import * as EN from "./configs/EN";
 
 export enum Phrases {
     GREETING = 'greeting',
@@ -74,18 +75,21 @@ export enum Buttons {
 export enum Langs {
     RU = 'ru',
     UA = 'ua',
+    EN = 'en'
 }
 
 export class Translator {
 
     private static readonly phrases = {
         ru: RU.phrases,
-        ua: UA.phrases
+        ua: UA.phrases,
+        en: EN.phrases
     };
 
     private static readonly buttons = {
         ru: RU.buttons,
-        ua: UA.buttons
+        ua: UA.buttons,
+        en: EN.buttons
     };
 
     /**
