@@ -11,6 +11,7 @@ import * as path from "path";
 import {StateHolder} from "@core/fsm";
 import {FileManager} from "@core/fileManager";
 import {Scheduler} from "@core/scheduler";
+import {sendHourlySystemStatistic} from "@core/scheduler/jobs";
 
 sm.install();
 
@@ -37,6 +38,8 @@ sm.install();
         StateHolder.init(botRelation, stateRelation);
 
         Scheduler.getInstance().init();
+
+        await sendHourlySystemStatistic();
     } catch (error) {
         throw new Error(error.message);
     }
