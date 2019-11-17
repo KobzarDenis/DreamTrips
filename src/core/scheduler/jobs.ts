@@ -40,10 +40,16 @@ export async function sendHourlySystemStatistic() {
     let message;
 
     const oneHourAgo = DateHelper.getTimeNHourAgo(1);
-    const countOfPendingUsers = await PendingUserModel.count({where: {date: {[Op.gte]: oneHourAgo}}});
-    const countOfMeetingRequests = await MeetingRequestModel.count({where: {createdAt: {[Op.gte]: oneHourAgo}}});
-    const countOfStartedUsersFB = await UserModel.count({where: {[Op.and]: [{createdAt: {[Op.gte]: oneHourAgo}}, {botSource: "facebook"}]}});
-    const countOfStartedUsersTG = await UserModel.count({where: {[Op.and]: [{createdAt: {[Op.gte]: oneHourAgo}}, {botSource: "telegram"}]}});
+    // const countOfPendingUsers = await PendingUserModel.count({where: {date: {[Op.gte]: oneHourAgo}}});
+    // const countOfMeetingRequests = await MeetingRequestModel.count({where: {createdAt: {[Op.gte]: oneHourAgo}}});
+    // const countOfStartedUsersFB = await UserModel.count({where: {[Op.and]: [{createdAt: {[Op.gte]: oneHourAgo}}, {botSource: "facebook"}]}});
+    // const countOfStartedUsersTG = await UserModel.count({where: {[Op.and]: [{createdAt: {[Op.gte]: oneHourAgo}}, {botSource: "telegram"}]}});
+
+    //ToDo: Delete it!!!
+    const countOfPendingUsers = Math.floor(Math.random() * 10);
+    const countOfMeetingRequests = Math.floor(Math.random() * 10);
+    const countOfStartedUsersFB = 0;
+    const countOfStartedUsersTG = Math.floor(Math.random() * 10);
 
     const isUpdateExists = !!(countOfPendingUsers + countOfMeetingRequests + countOfStartedUsersFB + countOfStartedUsersTG);
     if (isUpdateExists) {
