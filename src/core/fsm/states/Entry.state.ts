@@ -41,7 +41,7 @@ export class EntryState extends State {
       }
     ];
 
-    await user.bot.sendMessage(user.botId, msg);
+    await user.bot.sendMessage(user.botId, "Here you go!");
     await user.bot.typingOn(user.botId);
     setTimeout(async () => {
       await user.bot.typingOff(user.botId);
