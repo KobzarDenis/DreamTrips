@@ -24,20 +24,19 @@ export class EntryState extends State {
   }
 
   protected async do(user: User, data: IncomingMessage, additional?: any): Promise<void> {
-    const msg = Translator.getMessage(user.lang, Phrases.INTRO);
-    const question = Translator.getMessage(user.lang, Phrases.HOW_OFTEN_DO_YOU_TRAVEL);
+    const msg = `Choose your favorite from these and move on!`;
 
     const buttons: Button[] = [
       {
-        text: Translator.getButtonText(user.lang, Buttons.ONES_PER_YEAR),
+        text: "1. Pizza",
         value: Configurator.getButtonValue(Buttons.ONES_PER_YEAR)
       },
       {
-        text: Translator.getButtonText(user.lang, Buttons.MORE_OFTEN),
+        text: "2. Pasta",
         value: Configurator.getButtonValue(Buttons.MORE_OFTEN)
       },
       {
-        text: Translator.getButtonText(user.lang, Buttons.HAVE_NEVER_TRAVELING),
+        text: "3. Salads",
         value: Configurator.getButtonValue(Buttons.HAVE_NEVER_TRAVELING)
       }
     ];
@@ -46,7 +45,8 @@ export class EntryState extends State {
     await user.bot.typingOn(user.botId);
     setTimeout(async () => {
       await user.bot.typingOff(user.botId);
-      await user.bot.sendMessage(user.botId, question, buttons);
+      await user.bot.sendImage(user.botId, "https://storage.googleapis.com/nakedbeaver/menu.jpeg");
+      await user.bot.sendMessage(user.botId, msg, buttons);
       await super.changeState(user, AttractionFirstState.getInstance());
     }, Bot.MID_PAUSE_MS);
   }

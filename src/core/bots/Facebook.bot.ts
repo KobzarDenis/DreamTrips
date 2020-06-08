@@ -115,15 +115,19 @@ export class FacebookBot extends Bot {
     await this.bot.sendVideoMessage(chatId, "https://dreamtrips-team.s3.eu-central-1.amazonaws.com/video/dreamtrips.mp4");
   }
 
+  async sendImage(chatId: string, url: string): Promise<any> {
+    await this.bot.sendImageMessage(chatId, url);
+  }
+
   public async subscribe(data: IncomingMessage) {
     await this.bot.sendTextMessage(data.chat.id, `${data.chat.id}, Вы можете поднять дохуя бабла.`);
   }
 
   public async start(data: IncomingMessage) {
-    const message = `Выберите язык: `;
+    const message = `Choose your language: `;
     const buttons = [
-      { type: BUTTON_TYPE.POSTBACK, title: 'Русский 🇷🇺', payload: `${Command.Setup}:ru_${data.userId || 0}` },
-      { type: BUTTON_TYPE.POSTBACK, title: 'Українська 🇺🇦', payload: `${Command.Setup}:ua_${data.userId || 0}` },
+      { type: BUTTON_TYPE.POSTBACK, title: 'German 🇩🇪', payload: `${Command.Setup}:ru_${data.userId || 0}` },
+      { type: BUTTON_TYPE.POSTBACK, title: 'French 🇫🇷', payload: `${Command.Setup}:ua_${data.userId || 0}` },
       { type: BUTTON_TYPE.POSTBACK, title: 'English 🇮🇴', payload: `${Command.Setup}:en_${data.userId || 0}` },
     ];
 

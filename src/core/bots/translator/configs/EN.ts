@@ -1,5 +1,6 @@
 export const phrases = {
-  greeting: "Hi, {0}! 🖐😎\nMy name is DreamTrip Assistant!\nI'm gonna be your guide through the inspired world of impressions and prospects!🤩💥",
+  greeting: "Hello, {0}! 🖐\nI'm a chief-bot of Nakedbeaver restaurant!\nLet's go, i'm gonna help you create the best order!🤩",
+  // greeting: "Hi, {0}! 🖐😎\nMy name is DreamTrip Assistant!\nI'm gonna be your guide through the inspired world of impressions and prospects!🤩💥",
   intro: "At first i would like to ask you a few questions for get to know you better!",
   how_often_do_you_travel: "How often do you travel?",
   not_bad: "Not bad! You can more!",
