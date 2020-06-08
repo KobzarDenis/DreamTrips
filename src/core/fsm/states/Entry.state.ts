@@ -28,7 +28,7 @@ export class EntryState extends State {
 
     const buttons: Button[] = [
       {
-        text: "1. Pizza",
+        text: "1. Salads",
         value: Configurator.getButtonValue(Buttons.ONES_PER_YEAR)
       },
       {
@@ -36,7 +36,7 @@ export class EntryState extends State {
         value: Configurator.getButtonValue(Buttons.MORE_OFTEN)
       },
       {
-        text: "3. Salads",
+        text: "3. Pizza",
         value: Configurator.getButtonValue(Buttons.HAVE_NEVER_TRAVELING)
       }
     ];
